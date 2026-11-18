@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151919">
+  <meta name="description" content="One More Piece: an unofficial library of puzzles and games inspired by The Devil’s Plan. Play fresh Secret Code puzzles in your browser.">
+  <title>One More Piece — Puzzle &amp; game library</title>
+  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="library.css?v=1">
+  <script defer src="beans.js"></script>
+  <script defer src="library.js"></script>
+</head>
+<body class="library">
+  <a class="skip-link" href="#games">Skip to games</a>
+  <main>
+    <header class="library-header">
+      <a class="library-wordmark" href="index.html" aria-label="One More Piece home"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M4 4h8v8H4zm12 0h8v8h-8zM4 16h8v8H4z"/><path d="m18 15 8 3-3 8-8-3z"/></svg><span>One More Piece</span></a>
+      <nav aria-label="Library navigation"><a href="#games">Games</a><button id="about-button" class="text-button" aria-haspopup="dialog">About</button></nav>
+    </header>
+    <section class="library-intro" aria-labelledby="library-title">
+      <h1 id="library-title">One More Piece<span aria-hidden="true">.</span></h1>
+      <p>Puzzles and games inspired by <cite>The Devil’s Plan</cite>.<br class="desktop-break"> Your turn to figure it out.</p>
+    </section>
+    <div id="beans-home" class="beans-home library-beans"><div id="beans" class="beans-traveller" aria-hidden="true"><div class="beans-hole"></div><div class="beans-viewport"><div class="beans-actor"><div class="beans-sprite"></div></div></div></div></div>
+    <section id="games" class="game-library" aria-labelledby="games-title">
+      <div class="library-section-heading"><h2 id="games-title">The library</h2><span>1 playable game</span></div>
+      <article class="game-feature" aria-labelledby="secret-code-title">
+        <div class="game-cover" aria-hidden="true">
+          <div class="cover-cards">
+            <div class="cover-card coral"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/></svg><span>?</span><small>Coral</small></div>
+            <div class="cover-card blue"><svg viewBox="0 0 20 20"><path d="M10 2 18 17H2Z"/></svg><span>?</span><small>Blue</small></div>
+            <div class="cover-card gold"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14"/></svg><span>?</span><small>Gold</small></div>
+            <div class="cover-card jade"><svg viewBox="0 0 20 20"><path d="m10 1 9 9-9 9-9-9Z"/></svg><span>?</span><small>Jade</small></div>
+          </div>
+          <p>26 cards <span>→</span> 4 letters</p>
+        </div>
+        <div class="game-details">
+          <div class="game-kind"><span class="status-dot" aria-hidden="true"></span>Solo adaptation <span class="kind-separator">/</span> Logic &amp; deduction</div>
+          <h3 id="secret-code-title">Secret Code</h3>
+          <p>Find the four cards that satisfy every clue. A fresh board, a new set of conditions, and one solution to uncover.</p>
+          <ul class="game-facts" aria-label="Game features"><li>Four difficulty levels</li><li>Untimed practice</li><li>Optional buzzer</li></ul>
+          <a class="primary play-link" href="secret-code.html">Play Secret Code<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-5-5 5 5-5 5"/></svg></a>
+        </div>
+      </article>
+      <p class="library-note">The collection starts with Secret Code. Every game added gets its own place here.</p>
+    </section>
+    <footer class="library-footer"><p>Unofficial. Inspired by <cite>The Devil’s Plan</cite>.</p><label class="beans-option"><input id="beans-motion" type="checkbox" checked>Beans animation</label></footer>
+    <dialog id="about-dialog" class="library-about" aria-labelledby="about-title">
+      <div class="beans-dialog-dock"></div><h2 id="about-title" tabindex="-1">About One More Piece</h2>
+      <p>A place to play puzzles and games inspired by <cite>The Devil’s Plan</cite>. Secret Code is the first playable entry.</p>
+      <p>These are unofficial solo adaptations with original generated puzzles. Each game explains its own rules and practice options.</p>
+      <button id="about-close" class="primary">Back to the library</button>
+    </dialog>
+  </main>
+</body>
+</html>
