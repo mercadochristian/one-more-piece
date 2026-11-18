@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151919">
+  <meta name="description" content="Play Hexagon in One More Piece, an unofficial puzzle and game library inspired by The Devil’s Plan. Fresh solo puzzles, entirely in your browser.">
+  <title>One More Piece — Hexagon</title>
+  <link rel="stylesheet" href="../../shared/style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=2">
+  <script defer src="engine.js?v=1"></script>
+  <script defer src="../../shared/beans.js"></script>
+  <script defer src="app.js?v=2"></script>
+<link rel="stylesheet" href="../../shared/transitions.css?v=1"><script src="../../shared/entry.js?v=1"></script><script defer src="../../shared/music.js?v=1"></script><script defer src="../../shared/audio.js?v=2"></script>
+<link rel="stylesheet" href="../../shared/tutorial.css?v=3"><script defer src="tutorial-data.js?v=1"></script><script defer src="tutorial.js?v=1"></script>
+</head>
+<body class="hex-game" data-game="hexagon">
+  <main>
+    <nav class="game-breadcrumb" aria-label="Library navigation"><a id="back-library" class="library-back" href="../../index.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16 10H4m5-5-5 5 5 5"/></svg>Back to library</a><span>One More Piece</span></nav>
+    <header class="masthead">
+      <div><h1>Hexagon<span aria-hidden="true">.</span></h1><p>One More Piece · Inspired by The Devil’s Plan.</p></div>
+      <button id="new-game" class="outline">New round <span aria-hidden="true">↗</span></button>
+    </header>
+    <section class="game-settings" aria-label="Game settings">
+      <div class="practice-label"><span class="status-dot" aria-hidden="true"></span> Solo practice <span class="divider">/</span> <span id="puzzle-label">Puzzle 01</span></div>
+      <div class="options"><fieldset id="difficulty" class="difficulty-picker"><legend>Difficulty</legend><label><input type="radio" name="difficulty" value="easy"><span>Easy</span></label><label><input type="radio" name="difficulty" value="medium" checked><span>Medium</span></label><label><input type="radio" name="difficulty" value="hard"><span>Hard</span></label><label><input type="radio" name="difficulty" value="advanced"><span>Advanced</span></label></fieldset><div class="toolbar-actions"><button id="settings-button" class="text-button" aria-haspopup="dialog">Settings</button><button id="help-button" class="text-button" aria-haspopup="dialog">How to play</button></div></div>
+    </section>
+    <div id="beans-home" class="beans-home"><div id="beans" class="beans-traveller" aria-hidden="true"><div class="beans-hole"></div><div class="beans-viewport"><div class="beans-actor"><div class="beans-sprite"></div></div></div></div></div>
+    <section class="hex-stage" aria-labelledby="board-title">
+      <div class="hex-heading"><h2 id="board-title">Memorize. Then find the lines.</h2><span id="phase-label">Ready</span></div>
+      <div class="hex-round-info"><span id="range-label">Numbers 1–9</span><span id="memory-label">30s to memorize</span><span id="limit-label">Untimed recall</span></div>
+      <p id="phase-copy" class="hex-instructions">Start when you’re ready. The target appears after the numbers are hidden.</p>
+      <div id="hex-board" class="hex-board" role="group" aria-label="Hexagon tiles A to S"></div>
+      <div class="hex-start"><button id="start-study" class="primary">Start memorizing</button><span id="clock" aria-live="off"></span></div>
+      <div class="hex-actionbar"><div class="hex-target"><span>Target sum</span><strong id="target">—</strong></div><div class="hex-selection"><span>Selected letters</span><div id="selected-letters" class="hex-slots" aria-label="Selected letters: empty"></div></div><button id="clear" class="text-button" disabled>Clear</button><button id="submit" class="primary" disabled>Submit line →</button></div>
+      <p id="feedback" class="feedback" role="status">Your target stays hidden during memorization.</p>
+      <div class="hex-score"><span>Score <strong id="score">0</strong></span><span id="found-count">0 lines found</span><span class="hex-scoring">Correct +1 · Wrong or repeated −1</span></div>
+      <div id="found-lines" class="hex-found" aria-label="Found lines"></div>
+      <section id="round-review" class="hex-review" hidden aria-labelledby="review-title"><h2 id="review-title">The matching lines</h2><ul id="review-lines"></ul><button id="next-round" class="primary">Play another round</button></section>
+    </section>
+    <footer><p>One More Piece · Unofficial puzzles inspired by <cite>The Devil’s Plan</cite>.</p><button id="give-up" class="text-button">End round &amp; reveal</button></footer>
+    <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+      <div class="beans-dialog-dock"></div><h2 id="settings-title" tabindex="-1">Game settings</h2>
+      <p class="settings-copy">Sound and Beans changes apply immediately. Study and recall timers pause while dialogs are open or the tab is hidden.</p>
+      <div class="setting-row"><span><strong>Game sounds</strong><small>Tile clicks, phase changes and result sounds.</small></span><button id="sound-toggle" class="outline" aria-pressed="true">Sound on</button></div>
+      <label class="setting-row"><span><strong>Beans animation</strong><small>Turn off wandering and animated reactions.</small></span><input type="checkbox" id="beans-motion" checked></label>
+      <p id="settings-feedback" class="settings-feedback" role="status"></p>
+      <button id="settings-close" class="primary">Done</button>
+    </dialog>
+    <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title"><div class="beans-dialog-dock"></div>
+      <h2 id="help-title" tabindex="-1">Remember the numbers. Choose the letters.</h2>
+      <p class="onboarding-intro">Memorize the numbered positions. After they hide, choose three adjacent tiles in one straight line whose remembered numbers add up to the target.</p>
+      <section id="tutorial-example" class="tutorial-example" aria-label="Worked example"></section>
+      <details class="tutorial-rules"><summary>All rules &amp; practice options</summary>
+        <p>Every round has 19 tiles. Start memorizing when ready; the target stays hidden until recall. When the timer ends, or you choose Hide numbers, the board shows letters instead of numbers.</p>
+        <p>Choose exactly three different neighboring tiles in one straight line. Horizontal and both diagonal directions count. You cannot turn a corner or skip an intervening tile. Submit their letters in any selection order.</p>
+        <p>Find all 2–5 matching lines for the target. A correct new line earns 1 point. A wrong answer or repeated line costs 1 point. An incorrect submission preserves your selection; it does not reveal the hidden values.</p>
+        <p>Easy: numbers 1–5, 60 seconds to memorize, untimed recall. Medium: 1–9, 30 seconds, untimed recall. Hard: 1–9, 20 seconds, 90-second recall. Advanced: 1–12, 12 seconds, 60-second recall. These are solo practice settings, not measured human difficulty guarantees.</p>
+        <p>Timers pause while any dialog is open or this tab is hidden. Paused study numbers are covered. Use End round &amp; reveal to see all values and matching lines. Difficulty changes and leaving an unfinished round ask for confirmation.</p>
+        <p>Keyboard: Tab to the board during recall; arrow keys move between tiles. Enter or Space selects/deselects. Tab leaves the board. Three selected letters appear in the answer bar.</p>
+      </details>
+      <button id="help-close" class="primary">Start playing</button>
+    </dialog>
+    <dialog id="win-dialog" class="win-dialog" aria-labelledby="win-title" aria-describedby="win-copy">
+      <div class="win-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="beans-dialog-dock"></div>
+      <h2 id="win-title">Round mastered.</h2>
+      <p id="win-copy">Congratulations. Every matching line, found.</p>
+      <div class="hex-win-mark" aria-hidden="true">⬡</div>
+      <dl class="win-summary"><div><dt>Level</dt><dd id="win-level"></dd></div><div><dt>Score</dt><dd id="win-time"></dd></div><div><dt>Lines found</dt><dd id="win-clues"></dd></div></dl>
+      <button id="win-again" class="primary">Play again</button>
+      <button id="win-review" class="text-button">Review board</button>
+    </dialog>
+    <dialog id="correct-dialog" class="wrong-dialog hex-correct" aria-labelledby="correct-title"><div class="beans-dialog-dock"></div><h2 id="correct-title">Line found.</h2><p id="correct-copy"></p><button id="correct-continue" class="primary">Keep going</button></dialog>
+    <dialog id="wrong-dialog" class="wrong-dialog" aria-labelledby="wrong-title" aria-describedby="wrong-copy">
+      <div class="beans-dialog-dock"></div>
+      <h2 id="wrong-title">Try another line.</h2><p id="wrong-copy"></p>
+      <button id="wrong-primary" class="primary">Try again</button>
+
+    </dialog>
+    <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="beans-dialog-dock"></div><h2 id="confirm-title"></h2><p id="confirm-copy"></p><div class="dialog-actions"><button id="confirm-cancel" class="outline">Keep playing</button><button id="confirm-ok" class="primary"></button></div></dialog>
+    <noscript>This game needs JavaScript enabled to generate puzzles.</noscript>
+  </main>
+</body>
+</html>

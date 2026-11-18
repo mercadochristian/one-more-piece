@@ -64,13 +64,13 @@
       return slot;
     }));
     $('answer-slots').setAttribute('aria-label', `Selected code: ${code.join(', ') || 'empty'}`);
-    $('selection-count').textContent = `${code.length} of 4 selected · A–Z order`;
+    $('selection-count').textContent = `${code.length}/4 letters · A–Z`;
     document.querySelectorAll('.card').forEach(card => {
       card.setAttribute('aria-pressed', String(selected.has(card.dataset.letter)));
       card.disabled = ended;
     });
     $('submit').disabled = ended || ((!buzzer || deadline !== null) && code.length !== 4);
-    $('submit').textContent = buzzer && deadline === null ? 'Buzz in · 10 seconds' : 'Submit code →';
+    $('submit').textContent = buzzer && deadline === null ? 'Buzz in · 10 seconds' : 'Submit letters →';
     $('clear').disabled = ended || selected.size === 0;
   }
   function finish(message, kind) {
@@ -115,7 +115,7 @@
     else if (selected.size < 4) { selected.add(letter); sound('select'); }
     else { tell('Four cards are selected. Deselect one before choosing another.'); return; }
     updateSelection();
-    tell(deadline ? 'Buzzer running. Submit your code before time runs out.' : 'Your selection is private. Submit when you’re ready.');
+    tell(deadline ? 'Buzzer running. Submit your code before time runs out.' : 'Your selected letters form the code. Submit when you’re ready.');
   }
   function checkTimeout() {
     if (deadline !== null && Date.now() >= deadline) {

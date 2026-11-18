@@ -1,0 +1,3 @@
+/* Keep the card's output letter prominent alongside its clue number. */
+.card .card-letter{font-size:17px;font-weight:600;color:var(--accent)}.board-note{max-width:65ch}.answer-entry h2{white-space:normal}
+@media(max-width:520px){.card .card-letter{font-size:15px}}
