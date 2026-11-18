@@ -49,3 +49,43 @@ test('submission rejects empty, open, branching, disconnected and clue-breaking 
 test('bounded search reports exhaustion instead of claiming uniqueness',()=>{
   const result=E.solve(4,Array(16).fill(null),2,1);assert.equal(result.exhausted,true);
 });
+
+test('phone corner input resolves to the nearest line at every difficulty and viewport size',()=>{
+  for(const {size}of Object.values(E.levels))for(const width of [258,312,434]){
+    // Old overlapping rectangles send this point to the later-painted vertical button.
+    assert.equal(E.hitEdge(size,9,8,width),0);
+    assert.equal(E.hitEdge(size,8,9,width),size*(size+1));
+    assert.equal(E.hitEdge(size,0,0,width),null,'dots do not choose an arbitrary edge');
+    assert.equal(E.hitEdge(size,9,9,width),null,'equidistant corners are ambiguous');
+    const step=width/size;
+    assert.equal(E.hitEdge(size,step/2,step/2,width),null,'cell centers never draw');
+    assert.equal(E.hitEdge(size,width-step/2,width,width),size*size+size-1);
+    assert.equal(E.hitEdge(size,width,width-step/2,width),2*size*(size+1)-1);
+    assert.equal(E.hitEdge(size,-50,-50,width),null);
+  }
+});
+
+test('reveal comparison preserves the attempt and identifies missing/extra borders and affected cells',async()=>{
+  const p=await E.generate('advanced',88),attempt=p.answer.map(v=>v===1?1:2);
+  const missing=attempt.findIndex(v=>v===1),extra=attempt.findIndex(v=>v===2);attempt[missing]=0;attempt[extra]=1;
+  const original=attempt.slice(),report=E.compare(p,attempt),topology=E.topology(p.size);
+  assert.deepEqual(attempt,original);assert.equal(report.correct,false);assert.deepEqual(report.missing,[missing]);assert.deepEqual(report.extra,[extra]);
+  assert.deepEqual(report.cells,topology.cells.map((edges,i)=>edges.includes(missing)||edges.includes(extra)?i:-1).filter(i=>i>=0));
+  assert.equal(E.compare(p,p.answer).correct,true);assert.deepEqual(E.compare(p,p.answer).cells,[]);
+  const notes=p.answer.map(v=>v===1?1:2);assert.equal(E.compare(p,notes).correct,true);assert.deepEqual(E.compare(p,notes).missing,[]);
+});
+
+test('all generated correct loops remain accepted after noisy corner taps are resolved spatially',async()=>{
+  for(const level of Object.keys(E.levels))for(let seed=1;seed<=20;seed++){
+    const p=await E.generate(level,seed),t=E.topology(p.size),values=Array(t.edges.length).fill(0),step=312/p.size;
+    t.edges.forEach((edge,id)=>{if(p.answer[id]!==1)return;const x=edge.c*step+(edge.orientation==='h'?9:8),y=edge.r*step+(edge.orientation==='v'?9:8);const hit=E.hitEdge(p.size,x,y,312);assert.equal(hit,id);values[hit]=1;});
+    assert.equal(E.valid(p,values),true);
+  }
+});
+
+test('reveal includes incorrect blank cells without pretending they have numbered clues',async()=>{
+  const p=await E.generate('advanced',90),cell=p.clues.findIndex(c=>c===null),t=E.topology(p.size),edge=t.cells[cell][0],attempt=p.answer.slice();
+  attempt[edge]=attempt[edge]===1?0:1;
+  const report=E.compare(p,attempt);
+  assert.equal(report.correct,false);assert.ok(report.cells.includes(cell));assert.equal(report.clueCells.includes(cell),false);
+});

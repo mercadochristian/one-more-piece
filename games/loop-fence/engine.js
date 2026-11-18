@@ -18,6 +18,30 @@
     return seen.size===active.length;
   }
   function valid(p,values) {const t=topology(p.size);return values.length===t.edges.length&&values.every(v=>v===0||v===1||v===2)&&singleLoop(t,values)&&t.cells.every((es,i)=>p.clues[i]===null||es.reduce((s,e)=>s+(values[e]===1),0)===p.clues[i]);}
+  // Resolve pointer input from the drawn grid, rather than overlapping DOM button boxes.
+  function hitEdge(size,x,y,width,height=width) {
+    if(![size,x,y,width,height].every(Number.isFinite)||size<1||!Number.isInteger(size)||width<=0||height<=0)return null;
+    const t=topology(size),sx=width/size,sy=height/size,tolerance=Math.min(14,Math.min(sx,sy)*.38);
+    const vx=Math.round(x/sx),vy=Math.round(y/sy);
+    if(vx>=0&&vx<=size&&vy>=0&&vy<=size&&Math.hypot(x-vx*sx,y-vy*sy)<Math.min(6,Math.min(sx,sy)*.14))return null;
+    const distances=t.edges.map((edge,id)=>{
+      const x1=edge.c*sx,y1=edge.r*sy,x2=x1+(edge.orientation==='h'?sx:0),y2=y1+(edge.orientation==='v'?sy:0);
+      const dx=x2-x1,dy=y2-y1,along=Math.max(0,Math.min(1,((x-x1)*dx+(y-y1)*dy)/(dx*dx+dy*dy)));
+      return {id,distance:Math.hypot(x-x1-along*dx,y-y1-along*dy)};
+    }).sort((a,b)=>a.distance-b.distance);
+    if(distances[0].distance>tolerance||distances[1]&&Math.abs(distances[1].distance-distances[0].distance)<.25)return null;
+    return distances[0].id;
+  }
+  function compare(p,attempt) {
+    const t=topology(p.size),correct=valid(p,attempt),missing=[],extra=[];
+    if(!correct)t.edges.forEach((_,i)=>{if(p.answer[i]===1&&attempt[i]!==1)missing.push(i);else if(p.answer[i]!==1&&attempt[i]===1)extra.push(i);});
+    const different=new Set([...missing,...extra]);
+    const cells=t.cells.map((edges,i)=>edges.some(id=>different.has(id))?i:-1).filter(i=>i>=0);
+    const clueCells=t.cells.map((edges,i)=>p.clues[i]!==null&&edges.filter(id=>attempt[id]===1).length!==p.clues[i]?i:-1).filter(i=>i>=0);
+    const degrees=t.vertices.map(edges=>edges.filter(id=>attempt[id]===1).length);
+    const reason=correct?'correct':!attempt.some(v=>v===1)?'empty':degrees.some(d=>d>2)?'branch':degrees.some(d=>d===1)?'open':!singleLoop(t,attempt)?'separate':'clues';
+    return {correct,missing,extra,cells,clueCells,reason};
+  }
   // Constraint propagation plus bounded search; an exhausted search is never a uniqueness proof.
   function solve(size,clues,limit=2,budget=40000) {
     const t=topology(size), solutions=[];let nodes=0, exhausted=false;
@@ -60,6 +84,6 @@
     }
     throw new Error('Could not verify a unique puzzle. Please try again.');
   }
-  const api=Object.freeze({levels,topology,singleLoop,valid,solve,generate});
+  const api=Object.freeze({levels,topology,singleLoop,valid,hitEdge,compare,solve,generate});
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.LoopFence=api;
 })(typeof window==='undefined'?globalThis:window);

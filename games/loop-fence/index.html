@@ -7,10 +7,10 @@
   <meta name="description" content="Play Loop Fence Puzzle in One More Piece, an unofficial puzzle and game library inspired by The Devil’s Plan. Fresh solo puzzles, entirely in your browser.">
   <title>One More Piece — Loop Fence Puzzle</title>
   <link rel="stylesheet" href="../../shared/style.css?v=6">
-  <link rel="stylesheet" href="style.css?v=1">
-  <script defer src="engine.js?v=1"></script>
+  <link rel="stylesheet" href="style.css?v=2">
+  <script defer src="engine.js?v=2"></script>
   <script defer src="../../shared/beans.js"></script>
-  <script defer src="app.js?v=2"></script>
+  <script defer src="app.js?v=5"></script>
 <link rel="stylesheet" href="../../shared/transitions.css?v=1"><script src="../../shared/entry.js?v=1"></script><script defer src="../../shared/music.js?v=1"></script><script defer src="../../shared/audio.js?v=2"></script>
 <link rel="stylesheet" href="../../shared/tutorial.css?v=3"><script defer src="../../shared/tutorial-data.js?v=3"></script><script defer src="../../shared/tutorial.js?v=3"></script>
 </head>
@@ -29,9 +29,11 @@
     <section class="loop-stage" aria-labelledby="board-title">
       <div class="loop-heading"><h2 id="board-title">One unbroken loop.</h2><span id="board-size">5 × 5 grid</span></div>
       <div class="loop-toolbar" role="group" aria-label="Drawing tools"><div class="drawing-tools"><button data-tool="1" aria-pressed="true">━ <span>Fence</span></button><button data-tool="2" aria-pressed="false">× <span>Cross</span></button><button data-tool="0" aria-pressed="false">⌫ <span>Erase</span></button></div><div class="history-tools"><button id="undo" class="text-button" disabled>Undo</button><button id="redo" class="text-button" disabled>Redo</button></div></div>
-      <p id="board-instructions" class="loop-instructions">Tap between two dots to draw. Tap again to remove.</p>
+      <p id="board-instructions" class="loop-instructions">Tap an edge between two dots. Tap again to remove.</p>
+      <div id="reveal-tools" class="loop-review-tools" role="group" aria-label="Review drawing" hidden><button id="show-attempt" class="outline" aria-pressed="false">Your attempt</button><button id="show-solution" class="outline" aria-pressed="true">Correct loop</button></div>
       <div id="loop-board" class="loop-board" role="group" aria-label="Loop fence puzzle" aria-describedby="board-instructions" aria-busy="true"></div>
       <p id="feedback" class="feedback" role="status">Preparing your puzzle…</p>
+      <section id="reveal-details" class="loop-reveal-details" aria-label="Attempt comparison" hidden><h3>What differed</h3><p id="reveal-copy"></p><p class="loop-review-legend"><span>Jade edge: missing from your attempt</span><span>Coral edge: extra in your attempt</span></p><small id="reveal-reference"></small></section>
       <div class="loop-submit"><span id="line-count">0 fence edges</span><button id="submit" class="primary" disabled>Submit loop →</button></div>
     </section>
     <footer><p>One More Piece · Unofficial puzzles inspired by <cite>The Devil’s Plan</cite>.</p><div class="loop-footer-actions"><button id="clear" class="text-button">Clear board</button><button id="give-up" class="text-button">Give up &amp; reveal</button></div></footer>
@@ -47,7 +49,7 @@
     <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title"><div class="beans-dialog-dock"></div>
       <h2 id="help-title" tabindex="-1">Draw one loop. Match every number.</h2><p class="onboarding-intro">Connect the dots into one closed fence. Each number tells you how many sides of that cell belong to the fence.</p><section id="tutorial-example" class="tutorial-example" aria-label="Worked example"></section><details class="tutorial-rules"><summary>All rules &amp; practice options</summary><p>Connect adjacent dots with horizontal or vertical edges to form <strong>one continuous closed loop</strong>. It cannot branch, cross itself, or split into separate loops. You do not need to use every dot.</p>
       <p>A number tells you exactly how many of that cell’s four sides belong to the fence. A blank cell has no number constraint. Crosses are optional notes for edges you have ruled out; you do not need to mark every unused edge.</p>
-      <p>Choose Fence, Cross, or Erase, then tap an edge. Tapping a matching mark removes it. Right-click an edge to toggle a cross. Undo and Redo preserve your drawing history. Submit checks your loop without revealing the solution after a wrong answer.</p>
+      <p>Choose Fence, Cross, or Erase, then tap an edge. Tapping a matching mark removes it. Right-click an edge to toggle a cross. Undo and Redo preserve your drawing history. Submit checks your loop without revealing the solution after a wrong answer. On a phone, taps snap to the nearest edge; dots and ambiguous corner taps are ignored. Give up &amp; reveal keeps your attempt for comparison. Cells whose borders differ pulse briefly; use Your attempt and Correct loop to compare. Jade marks missing edges and coral marks extra edges. Crosses are optional notes and are never counted as fence edges.</p>
       <p><strong>Keyboard:</strong> Tab to the board, then use arrow keys to move between edges. Enter or Space uses your selected tool; X toggles a cross; Delete or Backspace erases. Tab leaves the board. The board has one verified solution.</p>
       <p>Difficulty changes grid size and clue density: Easy 4×4, Medium 5×5, Hard 6×6, Advanced 7×7. Levels describe puzzle structure, not measured solving times. A new puzzle or page reload discards the current drawing.</p>
 </details>

@@ -2,7 +2,7 @@
   'use strict';
   const $ = id => document.getElementById(id);
   let puzzle=null, values=[], history=[], future=[], tool=1, ended=false, failed=false, busy=false, level='medium', puzzleNumber=0, startedAt=0, strict=false;
-  let soundEnabled=true, audio=null, audioMaster=null, pending=null, returnFocus=null;
+  let soundEnabled=true, audio=null, audioMaster=null, pending=null, returnFocus=null, review=null, reviewView='solution';
   function sound(kind) {
     if (!soundEnabled) return;
     try {
@@ -31,7 +31,7 @@
   }
   function tell(text,kind=''){ $('feedback').textContent=text;$('feedback').dataset.kind=kind; }
   function update(){
-    document.querySelectorAll('.loop-edge').forEach((el,i)=>{el.dataset.state=values[i];el.setAttribute('aria-label',`${edgeLabel(i)}: ${['empty','fence','cross'][values[i]]}`);el.disabled=ended||busy;});
+    document.querySelectorAll('.loop-edge').forEach((el,i)=>{el.dataset.state=values[i];el.setAttribute('aria-label',`${edgeLabel(i)}: ${['empty','fence','cross'][values[i]]}`);el.disabled=ended||busy;el.dataset.diff=review?.report.missing.includes(i)?'missing':review?.report.extra.includes(i)?'extra':'';});
     const count=values.filter(v=>v===1).length;
     $('line-count').textContent=`${count} fence edge${count===1?'':'s'}`;
     $('undo').disabled=busy||ended||!history.length;$('redo').disabled=busy||ended||!future.length;
@@ -40,6 +40,10 @@
     $('new-game').disabled=busy;
     document.querySelectorAll('input[name=difficulty]').forEach(el=>el.disabled=busy);
     document.querySelectorAll('[data-tool]').forEach(el=>el.disabled=busy||ended);
+    document.querySelectorAll('.loop-cell-feedback').forEach(el=>el.dataset.incorrect=String(Boolean(review?.report.cells.includes(Number(el.dataset.cell)))));
+    $('reveal-tools').hidden=!review;$('reveal-details').hidden=!review;
+    if(review){$('show-attempt').setAttribute('aria-pressed',String(reviewView==='attempt'));$('show-solution').setAttribute('aria-pressed',String(reviewView==='solution'));}
+
   }
   function edgeLabel(i){const e=LoopFence.topology(puzzle.size).edges[i];return `${e.orientation==='h'?'Horizontal':'Vertical'} edge, row ${e.r+1}, column ${e.c+1}`;}
   function edit(i,value){if(busy||ended||value===0&&values[i]===0)return;history.push(values.slice());future=[];values[i]=values[i]===value?0:value;update();sound(values[i]===1?'select':'deselect');Beans.react(values[i]===1?'select':'click');tell('Your drawing is private. Submit when you’re ready.');}
@@ -47,12 +51,11 @@
   function render(){
     const t=LoopFence.topology(puzzle.size),n=puzzle.size,grid=document.createElement('div');grid.className='loop-grid';grid.style.setProperty('--n',n);
     const place=(el,x,y)=>{el.style.left=`${x/n*100}%`;el.style.top=`${y/n*100}%`;grid.append(el);};
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++){const cell=document.createElement('span');cell.className='loop-cell-feedback';cell.dataset.cell=r*n+c;cell.ariaHidden='true';place(cell,c+.5,r+.5);}
     for(let r=0;r<=n;r++)for(let c=0;c<=n;c++){const dot=document.createElement('span');dot.className='loop-dot';dot.ariaHidden='true';place(dot,c,r);}
     puzzle.clues.forEach((v,i)=>{if(v===null)return;const el=document.createElement('span');el.className='loop-clue';el.setAttribute('role','img');el.textContent=v;el.setAttribute('aria-label',`Cell row ${Math.floor(i/n)+1}, column ${i%n+1}: ${v} fence edges`);place(el,i%n+.5,Math.floor(i/n)+.5);});
     const positions=t.edges.map(e=>({x:e.c+(e.orientation==='h'?.5:0),y:e.r+(e.orientation==='v'?.5:0)}));
     t.edges.forEach((e,i)=>{const button=document.createElement('button');button.className=`loop-edge ${e.orientation}`;button.type='button';button.tabIndex=i===0?0:-1;button.dataset.edge=i;
-      button.addEventListener('click',()=>{focusEdge(button);edit(i,tool);});
-      button.addEventListener('contextmenu',event=>{event.preventDefault();focusEdge(button);edit(i,2);});
       button.addEventListener('keydown',event=>{
         if(['x','X','Delete','Backspace'].includes(event.key)){event.preventDefault();edit(i,event.key.toLowerCase()==='x'?2:0);return;}
         const direction={ArrowRight:[1,0],ArrowLeft:[-1,0],ArrowDown:[0,1],ArrowUp:[0,-1]}[event.key];if(!direction)return;event.preventDefault();let best=-1,score=Infinity;const p=positions[i];positions.forEach((q,j)=>{const dx=q.x-p.x,dy=q.y-p.y,along=dx*direction[0]+dy*direction[1],across=Math.abs(dx*direction[1]-dy*direction[0]);if(along>.01){const distance=along+across*3;if(distance<score){score=distance;best=j;}}});if(best>=0)focusEdge(grid.querySelector(`[data-edge="${best}"]`));
@@ -60,8 +63,21 @@
     });
     $('loop-board').replaceChildren(grid);$('loop-board').dataset.revealed='false';$('loop-board').setAttribute('aria-label',`${n} by ${n} loop fence puzzle`);
   }
+  function inputEdge(event){
+    const button=event.target.closest('.loop-edge');
+    if(event.type==='click'&&event.detail===0||event.type==='contextmenu'&&event.clientX===0&&event.clientY===0)return button?Number(button.dataset.edge):null;
+    const rect=$('loop-board').querySelector('.loop-grid').getBoundingClientRect();
+    return LoopFence.hitEdge(puzzle.size,event.clientX-rect.left,event.clientY-rect.top,rect.width,rect.height);
+  }
+  function drawFromEvent(event,value){
+    if(busy||ended||!puzzle)return;
+    const id=inputEdge(event);if(id===null){if(event.type==='click'&&event.detail!==0)tell('Tap near the middle of an edge, between two dots. Dots and ambiguous corner taps are ignored.');return;}
+    event.preventDefault();focusEdge($('loop-board').querySelector(`[data-edge="${id}"]`));edit(id,value);
+  }
+  $('loop-board').addEventListener('click',event=>drawFromEvent(event,tool));
+  $('loop-board').addEventListener('contextmenu',event=>drawFromEvent(event,2));
   async function newGame(nextLevel=level){
-    busy=true;ended=false;failed=false;update();$('loop-board').setAttribute('aria-busy','true');tell('Preparing a fresh puzzle…');
+    busy=true;ended=false;failed=false;review=null;reviewView='solution';update();$('loop-board').setAttribute('aria-busy','true');tell('Preparing a fresh puzzle…');
     try{
       const seed=new Uint32Array(1);crypto.getRandomValues(seed);
       puzzle=await LoopFence.generate(nextLevel,seed[0],()=>new Promise(resolve=>setTimeout(resolve,0)));
@@ -83,8 +99,26 @@
   $('undo').addEventListener('click',()=>{if(!history.length||ended)return;future.push(values.slice());values=history.pop();update();if($('undo').disabled)focusEdge(document.querySelector('.loop-edge[tabindex="0"]'));sound('deselect');Beans.react('review');tell('Last move undone.');});
   $('redo').addEventListener('click',()=>{if(!future.length||ended)return;history.push(values.slice());values=future.pop();update();if($('redo').disabled)focusEdge(document.querySelector('.loop-edge[tabindex="0"]'));sound('select');Beans.react('select');tell('Move restored.');});
   $('clear').addEventListener('click',()=>confirm('Clear this board?','Remove all fences and crosses. You can undo this clear.','Clear board',()=>{history.push(values.slice());future=[];values.fill(0);update();focusEdge(document.querySelector('.loop-edge[tabindex="0"]'));tell('Board cleared. Undo restores your drawing.');},$('clear')));
-  function reveal(){ended=true;failed=false;values=puzzle.answer.slice();update();$('loop-board').dataset.revealed='true';tell('Solution revealed. Start a fresh puzzle whenever you’re ready.');Beans.react('review');$('new-game').focus();}
-  $('give-up').addEventListener('click',()=>confirm('Reveal the loop?','This ends your attempt and shows the solution.','Reveal solution',reveal,$('give-up')));
+  function reviewMessage(){
+    if(review.report.correct)return 'Your loop was already correct. There are no incorrect cells to highlight.';
+    const {missing,extra,cells,reason}=review.report;
+    const explanation={empty:'Your attempt had no fence edges.',open:'Your attempt had open ends.',branch:'Your attempt had a branch or crossing.',separate:'Your attempt had separate loops.',clues:'Some numbered cells had the wrong number of sides.'}[reason];
+    return `${explanation} ${missing.length} missing and ${extra.length} extra fence edges. ${cells.length} highlighted cells had different borders in your attempt.`;
+  }
+  function setReviewView(view){
+    if(!review)return;reviewView=view;values=(view==='attempt'?review.attempt:review.solution).slice();update();
+    tell(`${view==='attempt'?'Your attempt':'Correct loop'} shown. ${reviewMessage()}`);Beans.react('review');
+  }
+  function reveal(){
+    const attempt=values.slice(),report=LoopFence.compare(puzzle,attempt);
+    review={attempt,solution:report.correct?attempt.map(v=>v===1?1:0):puzzle.answer.slice(),report};
+    ended=true;failed=false;$('loop-board').dataset.revealed='true';
+    $('reveal-copy').textContent=reviewMessage();$('reveal-reference').textContent=`Puzzle reference: ${puzzle.difficulty}-${puzzle.seed}`;
+    setReviewView('solution');$('reveal-tools').scrollIntoView({block:'start',behavior:'instant'});$('show-attempt').focus({preventScroll:true});
+  }
+  $('show-attempt').addEventListener('click',()=>setReviewView('attempt'));
+  $('show-solution').addEventListener('click',()=>setReviewView('solution'));
+  $('give-up').addEventListener('click',()=>confirm('Reveal the loop?','This ends your attempt, keeps it for comparison, and highlights cells whose borders differ from the solution.','Reveal solution',reveal,$('give-up')));
   $('back-library').addEventListener('click',event=>{if(busy||puzzle&&!ended){event.preventDefault();confirm('Back to the library?','Your current puzzle and drawing will be discarded.','Back to library',()=>{window.location.href='../../index.html';},$('back-library'));}});
   $('submit').addEventListener('click',()=>{
     if(busy||ended)return;Beans.react('submit');
@@ -99,7 +133,7 @@
   $('win-dialog').addEventListener('close',()=>$('new-game').focus());
   $('wrong-primary').addEventListener('click',()=>{$('wrong-dialog').close();if(strict)newGame();});
   $('wrong-review').addEventListener('click',()=>{$('wrong-dialog').close();if(strict)reveal();});
-  $('wrong-dialog').addEventListener('close',()=>{if(ended)$('new-game').focus();else document.querySelector('.loop-edge[tabindex="0"]')?.focus({preventScroll:true});});
+  $('wrong-dialog').addEventListener('close',()=>{if(review){$('show-attempt').focus({preventScroll:true});return;}if(ended)$('new-game').focus();else document.querySelector('.loop-edge[tabindex="0"]')?.focus({preventScroll:true});});
   for(const name of ['settings','help']){
     $(name+'-button').addEventListener('click',()=>{$(name+'-dialog').showModal();$(name+'-title').focus();Beans.react('review');});
     $(name+'-close').addEventListener('click',()=>$(name+'-dialog').close());
