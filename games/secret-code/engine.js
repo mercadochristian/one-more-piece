@@ -1,4 +1,3 @@
-/* Original, browser-only puzzle generator. Also usable from Node for verification. */
 (function (root) {
   'use strict';
   const colors = ['Coral', 'Blue', 'Gold', 'Jade'];
@@ -109,7 +108,7 @@
         if (clue) { clues.push(clue); families.add(family); remaining = remaining.filter(clue.test); }
       }
       if (clues.length !== profile.required.length) continue;
-      // Start with distinct clue families so rounds do not reduce to four pair equations.
+      // Fill the remaining starter slots with unused clue families to avoid repeated pair equations.
       for (const clue of pool) {
         if (clues.length >= 4) break;
         if (families.has(clue.family)) continue;

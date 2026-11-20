@@ -1,0 +1,277 @@
+/* Native host adapters for Beans Soft. Canonical snapshots live in beans-tokens.css and beans-components.css. */
+@font-face {
+  font-family: Geist;
+  src: url("assets/fonts/geist-sans.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --bg: var(--r-canvas);
+  --surface: var(--r-surface);
+  --line: var(--r-line);
+  --ink: var(--r-ink);
+  --muted: var(--r-muted);
+  --accent: var(--r-action);
+  --coral: #aa4035;
+  --blue: #365fa7;
+  --gold: #806019;
+  --jade: #276045;
+  --motion-dialog: var(--r-motion-dialog);
+  --motion-press: var(--r-motion-press);
+  font-family: var(--r-font);
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --accent: var(--r-focus);
+  --coral: #f39e92;
+  --blue: #9abfed;
+  --gold: #e8ce7c;
+  --jade: #9bceb1;
+  color-scheme: dark;
+}
+main {
+  padding: var(--r-space-8) var(--r-page-gutter) var(--r-space-6);
+}
+h2,
+h3 {
+  font-weight: 600;
+}
+h1 {
+  font-weight: 600;
+  font-size: clamp(36px, 4.5vw, 64px);
+  line-height: 1.04;
+}
+.r-icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.masthead {
+  padding-bottom: var(--r-space-6);
+}
+.game-breadcrumb {
+  margin-bottom: var(--r-space-6);
+}
+.game-settings {
+  padding-block: var(--r-space-4);
+  gap: var(--r-space-4);
+}
+.toolbar-actions {
+  gap: var(--r-space-1);
+}
+.game-settings .options {
+  gap: var(--r-space-4);
+}
+.difficulty-picker {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.difficulty-segments {
+  display: flex;
+  gap: var(--r-space-1);
+  padding: var(--r-space-1);
+  border-radius: 14px;
+  background: var(--r-subtle);
+}
+.options .difficulty-picker legend {
+  padding: 0 0 var(--r-space-2);
+  font: 550 14px/1.5 var(--r-font);
+  color: var(--r-ink);
+}
+.difficulty-picker span {
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-radius-control);
+  border: 0;
+  background: transparent;
+  padding: 8px 12px;
+  font: 550 14px/1.4 var(--r-font);
+  color: var(--r-muted);
+}
+.difficulty-picker input:checked + span {
+  border-color: transparent;
+  color: var(--r-ink);
+  background: var(--r-surface);
+  box-shadow: var(--r-shadow);
+  font-weight: 600;
+}
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible,
+.difficulty-picker input:focus-visible + span {
+  outline: 2px solid var(--r-focus);
+  outline-offset: 2px;
+}
+select:focus-visible,
+input:focus-visible {
+  outline: none;
+  border-color: var(--r-focus);
+  box-shadow: inset 0 0 0 1px var(--r-focus);
+}
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--r-focus);
+  outline-offset: 2px;
+}
+.cover-card {
+  border-radius: var(--r-radius-control);
+}
+dialog,
+.win-dialog,
+.wrong-dialog,
+.help-dialog,
+.settings-dialog {
+  border-radius: 24px;
+  padding: var(--r-panel-padding);
+  background: var(--r-surface);
+  box-shadow: var(--r-shadow-dialog);
+}
+.win-sparks {
+  border-radius: 24px;
+}
+dialog h2,
+.help-dialog h2,
+.settings-dialog h2,
+.win-dialog h2,
+.wrong-dialog h2 {
+  font: 600 28px/1.15 var(--r-font);
+  letter-spacing: -0.025em;
+}
+dialog h2:focus {
+  outline: none;
+}
+dialog p,
+.help-dialog p,
+.settings-dialog > .settings-copy {
+  font-size: 14px;
+  line-height: 1.6;
+}
+dialog::backdrop,
+.win-dialog::backdrop,
+.wrong-dialog::backdrop {
+  background: rgb(24 33 51 / 35%);
+}
+:root[data-theme="dark"] dialog::backdrop {
+  background: rgb(6 9 15 / 65%);
+}
+.dialog-actions {
+  flex-wrap: wrap;
+  gap: var(--r-space-3);
+}
+.appearance-field {
+  margin-bottom: var(--r-space-6);
+}
+.setting-row {
+  padding-block: var(--r-space-4);
+  gap: var(--r-space-4);
+}
+.setting-row.r-switch {
+  display: flex;
+  width: 100%;
+}
+.setting-row.r-switch input {
+  right: 0;
+  width: 38px;
+  height: 24px;
+}
+.setting-row .r-switch-track {
+  width: 38px;
+  height: 24px;
+}
+.setting-row strong {
+  font: 550 14px/1.5 var(--r-font);
+}
+.setting-row small {
+  margin-top: var(--r-space-1);
+}
+.settings-feedback:empty {
+  display: none;
+}
+.settings-dialog > .primary {
+  margin-top: var(--r-space-6);
+}
+.win-summary {
+  margin-block: var(--r-space-6);
+  padding-block: var(--r-space-4);
+}
+.feedback[data-kind="error"] {
+  color: var(--r-error);
+}
+.feedback[data-kind="success"] {
+  color: var(--r-positive);
+}
+.feedback:empty {
+  display: none;
+}
+.library-wordmark svg,
+.library-back svg,
+.play-link svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.library-back {
+  min-height: 44px;
+}
+.library a:focus-visible,
+.library-back:focus-visible {
+  outline: 2px solid var(--r-focus);
+  outline-offset: 2px;
+}
+@media (max-width: 1100px) {
+  :root {
+    --r-page-gutter: 32px;
+  }
+}
+@media (max-width: 780px) {
+  :root {
+    --r-page-gutter: 20px;
+    --r-panel-padding: 20px;
+  }
+  main {
+    padding-inline: var(--r-page-gutter);
+  }
+  .masthead {
+    align-items: start;
+  }
+  .masthead h1 {
+    font-size: clamp(32px, 6vw, 44px);
+  }
+  .game-settings .options {
+    width: 100%;
+    gap: var(--r-space-3);
+  }
+  .toolbar-actions {
+    justify-content: flex-start;
+    gap: var(--r-space-1);
+    flex-wrap: wrap;
+  }
+  .game-settings .options .difficulty-picker {
+    width: 100%;
+  }
+  .difficulty-picker span {
+    padding-inline: 8px;
+  }
+  .library-back {
+    font-size: 14px;
+  }
+}
+@media (max-width: 350px) {
+  :root {
+    --r-page-gutter: 16px;
+  }
+}

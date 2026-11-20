@@ -19,7 +19,8 @@
   }
   function play(kind){
     if(!enabled||document.hidden)return;
-    if(kind==='hover'&&!context)return; // Hover never tries to bypass browser autoplay rules.
+    // Hover never creates or resumes an audio context.
+    if(kind==='hover'&&context?.state!=='running')return;
     if(!init())return;
     if(kind==='hover'){const now=performance.now();if(now-lastHover<180)return;lastHover=now;tone(620,800,.075,.07);}
     else if(kind==='portal'){whoosh();tone(140,45,.95,.12);}
@@ -41,7 +42,7 @@
   window.GameAudio=Object.freeze({play,setEnabled});
   document.addEventListener('DOMContentLoaded',()=>{
     const controls=document.querySelector('#library-audio-control');
-    if(controls){effectButton=document.createElement('button');effectButton.className='audio-toggle';effectButton.type='button';effectButton.addEventListener('click',()=>{if(enabled&&context?.state!=='running'){init();play('click');}else{setEnabled(!enabled);if(enabled)play('click');}});controls.append(effectButton);setEnabled(enabled);}
+    if(controls){effectButton=document.createElement('button');effectButton.className='audio-toggle r-button r-button--secondary';effectButton.type='button';effectButton.addEventListener('click',()=>{if(enabled&&context?.state!=='running'){init();play('click');}else{setEnabled(!enabled);if(enabled)play('click');}});controls.append(effectButton);setEnabled(enabled);}
     const gameSound=document.getElementById('sound-toggle');
     if(gameSound&&!enabled&&gameSound.getAttribute('aria-pressed')==='true')gameSound.click();
     document.addEventListener('pointerdown',event=>{if(event.target.closest('.audio-toggle'))return;if(enabled)init();},{capture:true,passive:true});

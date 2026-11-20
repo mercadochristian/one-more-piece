@@ -1,4 +1,3 @@
-/* Original Slitherlink boards. No show boards or external puzzle data. */
 (function (root) {
   'use strict';
   const levels = Object.freeze({easy:{label:'Easy',size:4,keep:.85},medium:{label:'Medium',size:5,keep:.72},hard:{label:'Hard',size:6,keep:.6},advanced:{label:'Advanced',size:7,keep:.5}});

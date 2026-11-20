@@ -2,50 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script src="../../shared/appearance.js?v=ff40b753e7"></script>
+  <link rel="stylesheet" href="../../shared/beans-tokens.css?v=4e3ea48997">
+  <link rel="stylesheet" href="../../shared/beans-components.css?v=d30128ee52">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#151919">
+  <meta name="theme-color" content="#f6f7f9">
   <meta name="description" content="Play Hexagon in One More Piece, an unofficial puzzle and game library inspired by The Devil’s Plan. Fresh solo puzzles, entirely in your browser.">
   <title>One More Piece — Hexagon</title>
-  <link rel="stylesheet" href="../../shared/style.css?v=6">
-  <link rel="stylesheet" href="style.css?v=2">
-  <script defer src="engine.js?v=1"></script>
-  <script defer src="../../shared/beans.js"></script>
-  <script defer src="app.js?v=2"></script>
-<link rel="stylesheet" href="../../shared/transitions.css?v=1"><script src="../../shared/entry.js?v=1"></script><script defer src="../../shared/music.js?v=1"></script><script defer src="../../shared/audio.js?v=2"></script>
-<link rel="stylesheet" href="../../shared/tutorial.css?v=3"><script defer src="tutorial-data.js?v=1"></script><script defer src="tutorial.js?v=1"></script>
+  <link rel="stylesheet" href="../../shared/style.css?v=a0c8e65b7f">
+  <link rel="stylesheet" href="style.css?v=89e05b8e4d">
+  <script defer src="engine.js?v=2b86b9d9da"></script>
+  <script defer src="../../shared/beans.js?v=7b1511d684"></script>
+  <script defer src="app.js?v=8dd0d22b34"></script>
+<link rel="stylesheet" href="../../shared/transitions.css?v=610a7f4daa"><script src="../../shared/entry.js?v=8f038788f9"></script><script defer src="../../shared/music.js?v=a1e158c915"></script><script defer src="../../shared/audio.js?v=20d7d5f9f2"></script>
+<link rel="stylesheet" href="../../shared/tutorial.css?v=84cb0fd773"><script defer src="tutorial-data.js?v=9dcbd86446"></script><script defer src="tutorial.js?v=d34562ba37"></script>
+  <link rel="stylesheet" href="../../shared/beans-ui.css?v=10f0a5bef8">
 </head>
 <body class="hex-game" data-game="hexagon">
   <main>
-    <nav class="game-breadcrumb" aria-label="Library navigation"><a id="back-library" class="library-back" href="../../index.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16 10H4m5-5-5 5 5 5"/></svg>Back to library</a><span>One More Piece</span></nav>
+    <nav class="game-breadcrumb" aria-label="Library navigation"><a id="back-library" class="library-back" href="../../index.html"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M17 10H3m5-5-5 5 5 5"/></svg>Back to library</a><span>One More Piece</span></nav>
     <header class="masthead">
-      <div><h1>Hexagon<span aria-hidden="true">.</span></h1><p>One More Piece · Inspired by The Devil’s Plan.</p></div>
-      <button id="new-game" class="outline">New round <span aria-hidden="true">↗</span></button>
+      <div><h1>Hexagon<span aria-hidden="true">.</span></h1></div>
+      <button id="new-game" class="outline r-button r-button--secondary">New round <svg class="r-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 15 15 5M6 5h9v9"/></svg></button>
     </header>
     <section class="game-settings" aria-label="Game settings">
-      <div class="practice-label"><span class="status-dot" aria-hidden="true"></span> Solo practice <span class="divider">/</span> <span id="puzzle-label">Puzzle 01</span></div>
-      <div class="options"><fieldset id="difficulty" class="difficulty-picker"><legend>Difficulty</legend><label><input type="radio" name="difficulty" value="easy"><span>Easy</span></label><label><input type="radio" name="difficulty" value="medium" checked><span>Medium</span></label><label><input type="radio" name="difficulty" value="hard"><span>Hard</span></label><label><input type="radio" name="difficulty" value="advanced"><span>Advanced</span></label></fieldset><div class="toolbar-actions"><button id="settings-button" class="text-button" aria-haspopup="dialog">Settings</button><button id="help-button" class="text-button" aria-haspopup="dialog">How to play</button></div></div>
+      <div class="practice-label"><span id="puzzle-label">Puzzle 01</span></div>
+      <div class="options"><fieldset id="difficulty" class="difficulty-picker"><legend>Difficulty</legend><div class="difficulty-segments"><label><input type="radio" name="difficulty" value="easy"><span>Easy</span></label><label><input type="radio" name="difficulty" value="medium" checked><span>Medium</span></label><label><input type="radio" name="difficulty" value="hard"><span>Hard</span></label><label><input type="radio" name="difficulty" value="advanced"><span>Advanced</span></label></div></fieldset><div class="toolbar-actions"><button id="settings-button" class="text-button r-button r-button--ghost" aria-haspopup="dialog">Settings</button><button id="help-button" class="text-button r-button r-button--ghost" aria-haspopup="dialog">How to play</button></div></div>
     </section>
     <div id="beans-home" class="beans-home"><div id="beans" class="beans-traveller" aria-hidden="true"><div class="beans-hole"></div><div class="beans-viewport"><div class="beans-actor"><div class="beans-sprite"></div></div></div></div></div>
     <section class="hex-stage" aria-labelledby="board-title">
-      <div class="hex-heading"><h2 id="board-title">Memorize. Then find the lines.</h2><span id="phase-label">Ready</span></div>
+      <div class="hex-heading"><h2 id="board-title">Find the lines.</h2><span id="phase-label">Ready</span></div>
       <div class="hex-round-info"><span id="range-label">Numbers 1–9</span><span id="memory-label">30s to memorize</span><span id="limit-label">Untimed recall</span></div>
-      <p id="phase-copy" class="hex-instructions">Start when you’re ready. The target appears after the numbers are hidden.</p>
+      <p id="phase-copy" class="hex-instructions">Memorize the positions, then match the target.</p>
       <div id="hex-board" class="hex-board" role="group" aria-label="Hexagon tiles A to S"></div>
-      <div class="hex-start"><button id="start-study" class="primary">Start memorizing</button><span id="clock" aria-live="off"></span></div>
-      <div class="hex-actionbar"><div class="hex-target"><span>Target sum</span><strong id="target">—</strong></div><div class="hex-selection"><span>Selected letters</span><div id="selected-letters" class="hex-slots" aria-label="Selected letters: empty"></div></div><button id="clear" class="text-button" disabled>Clear</button><button id="submit" class="primary" disabled>Submit line →</button></div>
-      <p id="feedback" class="feedback" role="status">Your target stays hidden during memorization.</p>
+      <div class="hex-start"><button id="start-study" class="primary r-button r-button--primary">Start memorizing</button><span id="clock" aria-live="off"></span></div>
+      <div class="hex-actionbar"><div class="hex-target"><span>Target sum</span><strong id="target">—</strong></div><div class="hex-selection"><span>Your line</span><div id="selected-letters" class="hex-slots" aria-label="Selected letters: empty"></div></div><button id="clear" class="text-button r-button r-button--ghost" disabled>Clear</button><button id="submit" class="primary r-button r-button--primary" disabled>Submit line</button></div>
+      <p id="feedback" class="feedback" role="status"></p>
       <div class="hex-score"><span>Score <strong id="score">0</strong></span><span id="found-count">0 lines found</span><span class="hex-scoring">Correct +1 · Wrong or repeated −1</span></div>
       <div id="found-lines" class="hex-found" aria-label="Found lines"></div>
-      <section id="round-review" class="hex-review" hidden aria-labelledby="review-title"><h2 id="review-title">The matching lines</h2><ul id="review-lines"></ul><button id="next-round" class="primary">Play another round</button></section>
+      <section id="round-review" class="hex-review" hidden aria-labelledby="review-title"><h2 id="review-title">The matching lines</h2><ul id="review-lines"></ul><button id="next-round" class="primary r-button r-button--primary">Play another round</button></section>
     </section>
-    <footer><p>One More Piece · Unofficial puzzles inspired by <cite>The Devil’s Plan</cite>.</p><button id="give-up" class="text-button">End round &amp; reveal</button></footer>
+    <footer><p>Unofficial · Inspired by <cite>The Devil’s Plan</cite>.</p><button id="give-up" class="text-button r-button r-button--ghost">End round &amp; reveal</button></footer>
     <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
       <div class="beans-dialog-dock"></div><h2 id="settings-title" tabindex="-1">Game settings</h2>
       <p class="settings-copy">Sound and Beans changes apply immediately. Study and recall timers pause while dialogs are open or the tab is hidden.</p>
-      <div class="setting-row"><span><strong>Game sounds</strong><small>Tile clicks, phase changes and result sounds.</small></span><button id="sound-toggle" class="outline" aria-pressed="true">Sound on</button></div>
-      <label class="setting-row"><span><strong>Beans animation</strong><small>Turn off wandering and animated reactions.</small></span><input type="checkbox" id="beans-motion" checked></label>
+      <div class="setting-row"><span><strong>Game sounds</strong><small>Tile clicks, phase changes and result sounds.</small></span><button id="sound-toggle" class="outline r-button r-button--secondary" aria-pressed="true">Sound on</button></div>
+      <div class="r-field appearance-field"><label for="appearance">Appearance</label><div class="r-select-wrap"><select id="appearance" class="r-input r-select" data-appearance><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select><svg class="r-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m5 8 5 5 5-5"/></svg></div></div>
+      <label class="setting-row r-switch"><span><strong>Beans animation</strong></span><input type="checkbox" id="beans-motion" checked><span class="r-switch-track" aria-hidden="true"><span></span></span></label>
       <p id="settings-feedback" class="settings-feedback" role="status"></p>
-      <button id="settings-close" class="primary">Done</button>
+      <button id="settings-close" class="primary r-button r-button--primary">Done</button>
     </dialog>
     <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title"><div class="beans-dialog-dock"></div>
       <h2 id="help-title" tabindex="-1">Remember the numbers. Choose the letters.</h2>
@@ -59,7 +65,7 @@
         <p>Timers pause while any dialog is open or this tab is hidden. Paused study numbers are covered. Use End round &amp; reveal to see all values and matching lines. Difficulty changes and leaving an unfinished round ask for confirmation.</p>
         <p>Keyboard: Tab to the board during recall; arrow keys move between tiles. Enter or Space selects/deselects. Tab leaves the board. Three selected letters appear in the answer bar.</p>
       </details>
-      <button id="help-close" class="primary">Start playing</button>
+      <button id="help-close" class="primary r-button r-button--primary">Start playing</button>
     </dialog>
     <dialog id="win-dialog" class="win-dialog" aria-labelledby="win-title" aria-describedby="win-copy">
       <div class="win-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -68,17 +74,17 @@
       <p id="win-copy">Congratulations. Every matching line, found.</p>
       <div class="hex-win-mark" aria-hidden="true">⬡</div>
       <dl class="win-summary"><div><dt>Level</dt><dd id="win-level"></dd></div><div><dt>Score</dt><dd id="win-time"></dd></div><div><dt>Lines found</dt><dd id="win-clues"></dd></div></dl>
-      <button id="win-again" class="primary">Play again</button>
-      <button id="win-review" class="text-button">Review board</button>
+      <button id="win-again" class="primary r-button r-button--primary">Play again</button>
+      <button id="win-review" class="text-button r-button r-button--ghost">Review board</button>
     </dialog>
-    <dialog id="correct-dialog" class="wrong-dialog hex-correct" aria-labelledby="correct-title"><div class="beans-dialog-dock"></div><h2 id="correct-title">Line found.</h2><p id="correct-copy"></p><button id="correct-continue" class="primary">Keep going</button></dialog>
+    <dialog id="correct-dialog" class="wrong-dialog hex-correct" aria-labelledby="correct-title"><div class="beans-dialog-dock"></div><h2 id="correct-title">Line found.</h2><p id="correct-copy"></p><button id="correct-continue" class="primary r-button r-button--primary">Keep going</button></dialog>
     <dialog id="wrong-dialog" class="wrong-dialog" aria-labelledby="wrong-title" aria-describedby="wrong-copy">
       <div class="beans-dialog-dock"></div>
       <h2 id="wrong-title">Try another line.</h2><p id="wrong-copy"></p>
-      <button id="wrong-primary" class="primary">Try again</button>
+      <button id="wrong-primary" class="primary r-button r-button--primary">Try again</button>
 
     </dialog>
-    <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="beans-dialog-dock"></div><h2 id="confirm-title"></h2><p id="confirm-copy"></p><div class="dialog-actions"><button id="confirm-cancel" class="outline">Keep playing</button><button id="confirm-ok" class="primary"></button></div></dialog>
+    <dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="beans-dialog-dock"></div><h2 id="confirm-title"></h2><p id="confirm-copy"></p><div class="dialog-actions"><button id="confirm-cancel" class="outline r-button r-button--secondary">Keep playing</button><button id="confirm-ok" class="primary r-button r-button--primary"></button></div></dialog>
     <noscript>This game needs JavaScript enabled to generate puzzles.</noscript>
   </main>
 </body>

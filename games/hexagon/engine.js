@@ -1,4 +1,3 @@
-/* Original solo memory rounds on a radius-two hexagonal grid. */
 (function(root){
   'use strict';
   const levels=Object.freeze({

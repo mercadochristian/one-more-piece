@@ -30,8 +30,6 @@ test('rejects malformed, repeated, missing and incorrect cards', () => {
   assert.equal(game.check(p, wrong.map(c => c.letter).join('')), false);
 });
 test('clue text describes the numeric and attribute predicates independently', () => {
-  const p = game.generate(seeded(345));
-  const cases = game.combinations(p.board);
   const ranks = { first: 0, second: 1, third: 2, fourth: 3 };
   const checks = {
     sum: (text, c) => c.reduce((s, x) => s + x.number, 0) === +text.match(/to (\d+)/)[1],
@@ -51,22 +49,20 @@ test('clue text describes the numeric and attribute predicates independently', (
       const [, a, b] = text.match(/the (first|second|third|fourth) and (first|second|third|fourth) cards/);
       return c[ranks[a]].number*c[ranks[b]].number <= +text.match(/most (\d+)/)[1];
     },
-    frequency: (text, c) => {
+    frequency: (text, c, board) => {
       const key=text.includes('color')?'color':'shape';
       const rank=text.includes('second-smallest')?1:text.includes('third-smallest')?2:text.includes('largest')?3:0;
       const chosen=[...c].sort((a,b)=>a.number-b.number)[rank];
-      return p.board.filter(x=>x[key]===chosen[key]).length === +text.match(/exactly (\d+)/)[1];
+      return board.filter(x=>x[key]===chosen[key]).length === +text.match(/exactly (\d+)/)[1];
     }
   };
-  // Several seeds ensure all generated clue families are evaluated against non-solutions too.
+  // Hard exposes these eight clue families; the next test covers Anchor and Logic.
   const seen=new Set();
   for(let seed=10;seed<30;seed++) {
     const puzzle=game.generate(seeded(seed), 'hard');
-    // Use this puzzle's whole board for frequency comparisons.
-    p.board=puzzle.board;
     for(const clue of puzzle.clues) {
       seen.add(clue.family);
-      for(const c of game.combinations(puzzle.board)) assert.equal(clue.test(c),checks[clue.family](clue.text,c),clue.text);
+      for(const c of game.combinations(puzzle.board)) assert.equal(clue.test(c),checks[clue.family](clue.text,c,puzzle.board),clue.text);
     }
   }
   assert.equal(seen.size, 8);
