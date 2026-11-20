@@ -2,7 +2,59 @@
 
 **One More Piece** is an unofficial library of puzzles and games inspired by **The Devil’s Plan**, with Secret Code, Loop Fence Puzzle and Hexagon as playable entries. These browser-only solo games adapt puzzles from the show. All boards and clues are originally generated; no show artwork or puzzle boards are copied. This is a solo adaptation, not an exact reconstruction of the televised competition.
 
-Open `index.html` directly in a browser to browse the library, then choose **Play Secret Code**. Secret Code lives at `games/secret-code/index.html`; its **Back to library** link confirms before leaving an unfinished puzzle. Cancel preserves the current game. There are no dependencies, build steps, accounts, external playback services. The included Beans sprite sheet is loaded from the local assets directory. Select four cards satisfying every clue, then submit. A new puzzle changes the board and conditions. The generator enumerates all 14,950 four-card combinations and only returns a puzzle with exactly one solution. A bounded generation failure shows a retry message rather than serving an ambiguous puzzle.
+Open `index.html` directly in a browser to browse the library, then choose **Play Secret Code**. Secret Code lives at `games/secret-code/index.html`; its **Back to library** link confirms before leaving an unfinished puzzle. Cancel preserves the current game. Playing needs no package installation, build step, account or external playback service. npm dependencies support development checks only. The included Beans sprite sheet is loaded from the local assets directory. Select four cards satisfying every clue, then submit. A new puzzle changes the board and conditions. The generator enumerates all 14,950 four-card combinations and only returns a puzzle with exactly one solution. A bounded generation failure shows a retry message rather than serving an ambiguous puzzle.
+
+## Beans design system
+
+The library and all three games use Beans Soft with a bundled Geist variable font.
+Appearance defaults to the device's light/dark preference, including changes while
+the page is open. The library footer and each game's Settings offer System, Light
+and Dark. Explicit choices persist under `omp-appearance` when storage is available.
+The games retain their existing board
+geometry, named puzzle colors, mascot, sound settings and launch sequences.
+
+`shared/beans-tokens.css` is a vendored snapshot of
+`beans-design-system/src/tokens.css`. `shared/beans-components.css` is the matching
+reusable component stylesheet. Buttons, native select fields and settings switches
+use those shared component classes. `shared/beans-ui.css` contains the shared
+theme aliases, native dialog/form adapters and input-mode rules. Game and library
+layout stays in its owning stylesheet. The utility SVG icons
+reuse the original Beans drawings. `shared/appearance.js` applies appearance
+before paint, restores it after browser Back and tracks keyboard/pointer input.
+Geist and its OFL license live in
+`shared/assets/fonts/`. No React runtime or package dependency is required.
+
+Local Chrome review covered the library and all three games at 1440px and 390px,
+with selected 320px reflow checks. It covered light/dark appearance, settings,
+dialog dismissal and focus return, difficulty cancellation, selection/clearing,
+Loop Fence drawing/history/reveal, and Hexagon study/recall. The selected Loop
+review button retains readable text on hover in both themes. Difficulty options
+retain 44px height inside a 4px inset. Repeated labels and idle hints are removed.
+Changed CSS/JS references use content versions to prevent stale cached controls.
+
+The engine, tutorial and audio tests cover generated puzzle validity, worked
+examples, and hover before activation or with running, suspended, closed, hidden
+or muted audio contexts. Tooling tests verify that the configured linters reject
+bad source while allowing the documented environments and scoped exceptions.
+Complete winning flows, reduced-motion runtime
+behavior and physical mobile devices were not part of this browser review.
+Local verification does not establish deployed behavior.
+
+### CSS ownership
+
+| File | Responsibility |
+| --- | --- |
+| `shared/beans-tokens.css`, `shared/beans-components.css` | Unmodified canonical Beans snapshots |
+| `shared/style.css` | Shared page structure, native dialogs and mascot layout |
+| `shared/beans-ui.css` | Shared theme aliases and native host adapters |
+| `library/style.css` | Library layout, responsive styles and card interaction states |
+| `games/<game>/style.css` | That game's board, controls and responsive layout |
+| `shared/tutorial.css` | Worked-example layout and presentation |
+| `shared/transitions.css` | Portal/TV effects and shared music controls |
+
+Canonical component CSS loads before host styles. Loop Fence review buttons switch
+between the existing primary and secondary variants with their selected state.
+Secret Code's compact Clear control is a local fixed-answer-row layout exception.
 
 ## Project layout
 
@@ -113,11 +165,29 @@ Open `games/hexagon/index.html`, or select its entire library card. This is a so
 
 ## Checks
 
-Node.js 18 or newer is required only for the automated checks. Playing the games needs a modern browser and no build step.
+Use Node.js 22.22.2 or a supported version listed in `package.json` for development
+checks. The exact development dependency versions are pinned in
+`package-lock.json`. Playing the games still needs only a modern browser.
 
 ```sh
-node --test games/*/tests/*.test.cjs tests/*.test.cjs
+npm ci --ignore-scripts
+npm run check
 ```
+
+`npm run check` runs ESLint, Stylelint, all Node tests and `git diff --check`.
+Focused commands are `npm run lint:js`, `npm run lint:css`, and `npm test`.
+
+ESLint checks unused values and undeclared names. Browser scripts, portable engine
+exports, Node tests and configuration modules have separate global declarations.
+Stylelint checks duplicate selectors, properties and custom properties, plus
+`!important`. A necessary exception requires a rule-specific explanation; unused
+or descriptionless suppressions fail. The two canonical Beans snapshots are
+excluded from host-style lint, and their update policy remains in `AGENTS.md`.
+
+The tooling tests include intentionally invalid in-memory snippets, so a green
+check proves the rules reject violations as well as accepting the current code.
+Comment accuracy, CSS ownership, cascade ordering and visual behavior still need
+the source/browser review described in `AGENTS.md`; the linters do not prove them.
 
 The Secret Code suite verifies uniqueness across all four difficulty levels, valid and invalid submissions, and independent interpretation of clue wording. Loop Fence checks 80 seeds per level (320 boards), independently validates their loops and clues, checks solver counts against exhaustive enumeration on small boards, and rejects open, branching, disconnected and clue-breaking drawings. Hexagon checks 150 seeds per level (600 rounds), independently enumerates its 27 legal straight triples, verifies every target answer, rejects invalid/repeated selections and checks the worked example. Browser verification additionally covers library navigation, game interactions, dialogs and responsive layouts. Local checks do not establish deployed behavior.
 
@@ -125,4 +195,4 @@ The Secret Code suite verifies uniqueness across all four difficulty levels, val
 
 This repository is the self-contained library root. `index.html` is the homepage and the games live under `games/secret-code/`, `games/loop-fence/` and `games/hexagon/`. All links and assets use relative paths, including under the repository's Pages subpath.
 
-Publish from the `main` branch at the repository root (`/`). The `.nojekyll` file tells Pages to serve the static files directly. There are no packages to install or application servers to deploy.
+Publish from the `main` branch at the repository root (`/`). The `.nojekyll` file tells Pages to serve the static files directly. Publishing the static app needs no package installation, build or application server. `node_modules/` stays outside Git.

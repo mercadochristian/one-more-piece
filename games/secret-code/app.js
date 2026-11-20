@@ -64,13 +64,13 @@
       return slot;
     }));
     $('answer-slots').setAttribute('aria-label', `Selected code: ${code.join(', ') || 'empty'}`);
-    $('selection-count').textContent = `${code.length}/4 letters · A–Z`;
+    $('selection-count').textContent = `${code.length}/4 selected`;
     document.querySelectorAll('.card').forEach(card => {
       card.setAttribute('aria-pressed', String(selected.has(card.dataset.letter)));
       card.disabled = ended;
     });
     $('submit').disabled = ended || ((!buzzer || deadline !== null) && code.length !== 4);
-    $('submit').textContent = buzzer && deadline === null ? 'Buzz in · 10 seconds' : 'Submit letters →';
+    $('submit').textContent = buzzer && deadline === null ? 'Buzz in · 10 seconds' : 'Submit letters';
     $('clear').disabled = ended || selected.size === 0;
   }
   function finish(message, kind) {
@@ -164,7 +164,7 @@
     startedAt = Date.now();
     puzzleNumber++; selected = new Set(); ended = false;
     strict = $('strict').checked; buzzer = $('buzzer-mode').checked;
-    $('puzzle-label').textContent = `Puzzle ${String(puzzleNumber).padStart(2, '0')} · ${SecretCode.difficulties[puzzle.difficulty].label}`;
+    $('puzzle-label').textContent = `Puzzle ${String(puzzleNumber).padStart(2, '0')}`;
     $('solution').hidden = true; $('explanation').replaceChildren(); $('solution-title').textContent = '';
     $('give-up').disabled = false;
     $('board').replaceChildren(...puzzle.board.map(card => {
@@ -184,7 +184,7 @@
     }));
     $('clue-count').textContent = `${puzzle.clues.length} clues`;
     updateSelection();
-    tell(`Take your time.${strict ? ' One attempt only.' : ' Retries allowed.'}${buzzer ? ' Buzz when ready; then submit within 10 seconds.' : ' Your answer stays hidden until you solve it or give up.'}`);
+    tell(buzzer ? 'Buzz in when ready. You’ll have 10 seconds.' : strict ? 'One attempt only.' : '');
     Beans.react('new');
     return true;
   }

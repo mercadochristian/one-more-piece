@@ -15,9 +15,9 @@
   const caption=document.createElement('p');caption.className='tutorial-caption';caption.setAttribute('role','status');
   const count=document.createElement('span');count.className='tutorial-step';
   const controls=document.createElement('div');controls.className='tutorial-controls';
-  const play=document.createElement('button');play.className='primary';play.textContent='Play example';
-  const next=document.createElement('button');next.className='outline';next.textContent='Next step';
-  const restart=document.createElement('button');restart.className='text-button';restart.textContent='Restart';
+  const play=document.createElement('button');play.className='primary r-button r-button--primary';play.textContent='Play example';
+  const next=document.createElement('button');next.className='outline r-button r-button--secondary';next.textContent='Next step';
+  const restart=document.createElement('button');restart.className='text-button r-button r-button--ghost';restart.textContent='Restart';
   controls.append(play,next,restart);host.append(badge,title,canvas,count,caption,controls);
   function halt(){playing=false;clearTimeout(timer);timer=null;generation++;animations.forEach(a=>a.cancel());animations=[];play.textContent=step===example.steps.length-1?'Replay example':'Play example';}
   function animate(el,keys,options){if(reduced.matches)return;const a=el.animate(keys,{duration:250,easing:'cubic-bezier(0.23, 1, 0.32, 1)',...options});animations.push(a);a.finished.catch(()=>{});return a;}

@@ -20,7 +20,7 @@
       }
       window.GameAudio?.play('portal');
       const cx=innerWidth/2,cy=innerHeight/2;
-      const pieces=[...document.querySelectorAll('.library-header>a,.library-header>nav,.library-intro>* ,.beans-home,.library-section-heading,.game-feature .game-cover,.game-feature .game-details>*,.library-note,.library-footer')].filter(el=>{const r=el.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight;});
+      const pieces=[...document.querySelectorAll('.library-header>a,.library-header>nav,.library-intro>* ,.beans-home,.library-section-heading,.game-feature .game-cover,.game-feature .game-details>*,.library-footer')].filter(el=>{const r=el.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight;});
       animate(portal,[{opacity:0,transform:'translate(-50%,-50%) scale(.95)'},{opacity:1,transform:'translate(-50%,-50%) scale(1)'}],{duration:200,easing:ease});
       const pulls=pieces.map((el,i)=>{
         const r=el.getBoundingClientRect(),dx=cx-r.left-r.width/2,dy=cy-r.top-r.height/2;

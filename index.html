@@ -2,26 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script src="shared/appearance.js?v=ff40b753e7"></script>
+  <link rel="stylesheet" href="shared/beans-tokens.css?v=4e3ea48997">
+  <link rel="stylesheet" href="shared/beans-components.css?v=d30128ee52">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#151919">
+  <meta name="theme-color" content="#f6f7f9">
   <meta name="description" content="One More Piece: an unofficial library of puzzles and games inspired by The Devil’s Plan. Play fresh logic puzzles in your browser.">
   <title>One More Piece — Puzzle &amp; game library</title>
-  <link rel="stylesheet" href="shared/style.css?v=6">
-  <link rel="stylesheet" href="library/style.css?v=3">
-  <script defer src="shared/beans.js"></script>
-  <script defer src="library/app.js"></script>
-<link rel="stylesheet" href="shared/transitions.css?v=1"><script defer src="shared/audio.js?v=2"></script><script defer src="library/launch.js?v=1"></script>
+  <link rel="stylesheet" href="shared/style.css?v=a0c8e65b7f">
+  <link rel="stylesheet" href="library/style.css?v=19649d908d">
+  <script defer src="shared/beans.js?v=7b1511d684"></script>
+  <script defer src="library/app.js?v=ef835788bb"></script>
+<link rel="stylesheet" href="shared/transitions.css?v=610a7f4daa"><script defer src="shared/audio.js?v=20d7d5f9f2"></script><script defer src="library/launch.js?v=f1bebe706d"></script>
+  <link rel="stylesheet" href="shared/beans-ui.css?v=10f0a5bef8">
 </head>
 <body class="library">
   <a class="skip-link" href="#games">Skip to games</a>
   <main>
     <header class="library-header">
-      <a class="library-wordmark" href="index.html" aria-label="One More Piece home"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M4 4h8v8H4zm12 0h8v8h-8zM4 16h8v8H4z"/><path d="m18 15 8 3-3 8-8-3z"/></svg><span>One More Piece</span></a>
-      <nav aria-label="Library navigation"><a href="#games">Games</a><button id="about-button" class="text-button" aria-haspopup="dialog">About</button></nav>
+      <a class="library-wordmark" href="index.html" aria-label="One More Piece home"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zm10-1 5 2-2 5-5-2z"/></svg><span>One More Piece</span></a>
+      <nav aria-label="Library navigation"><a href="#games">Games</a><button id="about-button" class="text-button r-button r-button--ghost" aria-haspopup="dialog">About</button></nav>
     </header>
     <section class="library-intro" aria-labelledby="library-title">
-      <h1 id="library-title">One More Piece<span aria-hidden="true">.</span></h1>
-      <p>Puzzles and games inspired by <cite>The Devil’s Plan</cite>.<br class="desktop-break"> Your turn to figure it out.</p>
+      <h1 id="library-title">Your turn to figure it out<span aria-hidden="true">.</span></h1>
+      <p>Puzzles inspired by <cite>The Devil’s Plan</cite>.</p>
     </section>
     <div id="beans-home" class="beans-home library-beans"><div id="beans" class="beans-traveller" aria-hidden="true"><div class="beans-hole"></div><div class="beans-viewport"><div class="beans-actor"><div class="beans-sprite"></div></div></div></div></div>
     <section id="games" class="game-library" aria-labelledby="games-title">
@@ -37,30 +42,30 @@
           <p>26 cards <span>→</span> 4 letters</p>
         </div>
         <div class="game-details">
-          <div class="game-kind"><span class="status-dot" aria-hidden="true"></span>Solo adaptation <span class="kind-separator">/</span> Logic &amp; deduction</div>
+
           <h3 id="secret-code-title">Secret Code</h3>
-          <p>Find the four cards that satisfy every clue. A fresh board, a new set of conditions, and one solution to uncover.</p>
-          <ul class="game-facts" aria-label="Game features"><li>Four difficulty levels</li><li>Untimed practice</li><li>Optional buzzer</li></ul>
-          <span class="primary play-link">Play Secret Code<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-5-5 5 5-5 5"/></svg></span>
+          <p>Find the four cards that satisfy every clue.</p>
+
+          <span class="primary play-link r-button r-button--primary">Play Secret Code<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-5-5 5 5-5 5"/></svg></span>
         </div>
       </a>
       <a class="game-feature loop-feature" href="games/loop-fence/index.html" aria-labelledby="loop-title">
-        <div class="game-cover loop-cover" aria-hidden="true"><svg viewBox="0 0 280 210"><defs><pattern id="dots" x="30" y="25" width="55" height="40" patternUnits="userSpaceOnUse"><circle cx="0" cy="0" r="3" fill="#a9b1aa"/></pattern></defs><rect x="25" y="20" width="230" height="170" fill="url(#dots)"/><path d="M30 25H195V65H250V185H85V145H30Z" fill="none" stroke="#dfc08b" stroke-width="4" stroke-linejoin="round"/><g fill="#ede9de" font-family="Georgia,serif" font-size="22" text-anchor="middle"><text x="58" y="53">2</text><text x="168" y="53">2</text><text x="223" y="93">2</text><text x="113" y="133">0</text><text x="58" y="173">2</text><text x="223" y="173">2</text></g></svg><p>Every clue <span>→</span> one closed loop</p></div>
-        <div class="game-details"><div class="game-kind"><span class="status-dot" aria-hidden="true"></span>Solo adaptation <span class="kind-separator">/</span> Spatial logic</div><h3 id="loop-title">Loop Fence Puzzle</h3><p>Connect the dots into one unbroken loop. Every number is a clue. Every edge is your decision.</p><ul class="game-facts" aria-label="Game features"><li>Four difficulty levels</li><li>Fresh puzzles</li><li>Undo &amp; pencil marks</li></ul><span class="primary play-link">Play Loop Fence<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-5-5 5 5-5 5"/></svg></span></div>
+        <div class="game-cover loop-cover" aria-hidden="true"><svg viewBox="0 0 280 210"><defs><pattern id="dots" x="30" y="25" width="55" height="40" patternUnits="userSpaceOnUse"><circle cx="0" cy="0" r="3" fill="var(--muted)"/></pattern></defs><rect x="25" y="20" width="230" height="170" fill="url(#dots)"/><path d="M30 25H195V65H250V185H85V145H30Z" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linejoin="round"/><g fill="var(--ink)" font-family="Geist,system-ui,sans-serif" font-size="22" text-anchor="middle"><text x="58" y="53">2</text><text x="168" y="53">2</text><text x="223" y="93">2</text><text x="113" y="133">0</text><text x="58" y="173">2</text><text x="223" y="173">2</text></g></svg><p>Every clue <span>→</span> one closed loop</p></div>
+        <div class="game-details"><h3 id="loop-title">Loop Fence Puzzle</h3><p>Connect the dots into one loop that matches every clue.</p><span class="primary play-link r-button r-button--primary">Play Loop Fence<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-5-5 5 5-5 5"/></svg></span></div>
       </a>
       <a class="game-feature hex-feature" href="games/hexagon/index.html" aria-labelledby="hexagon-title">
-        <div class="game-cover hex-cover" aria-hidden="true"><svg viewBox="0 0 280 220"><g fill="#202725" stroke="#8d927b" stroke-width="1.4"><path d="M110 12 137 28V60L110 76 83 60V28Z"/><path d="M170 12 197 28V60L170 76 143 60V28Z"/><path d="M80 68 107 84V116L80 132 53 116V84Z"/><path d="M140 68 167 84V116L140 132 113 116V84Z"/><path d="M200 68 227 84V116L200 132 173 116V84Z"/><path d="M110 124 137 140V172L110 188 83 172V140Z"/><path d="M170 124 197 140V172L170 188 143 172V140Z"/></g><g fill="#dfc08b" font-family="Georgia,serif" font-size="26" text-anchor="middle"><text x="110" y="53">2</text><text x="170" y="53">B</text><text x="80" y="109">C</text><text x="140" y="109">5</text><text x="200" y="109">E</text><text x="110" y="165">F</text><text x="170" y="165">5</text></g></svg><p>Remember the numbers <span>→</span> find the line</p></div>
-        <div class="game-details"><div class="game-kind"><span class="status-dot" aria-hidden="true"></span>Solo adaptation <span class="kind-separator">/</span> Memory &amp; arithmetic</div><h3 id="hexagon-title">Hexagon</h3><p>The numbers disappear. Your memory stays. Find three neighboring tiles in a straight line that add up to the target.</p><ul class="game-facts" aria-label="Game features"><li>Four difficulty levels</li><li>19 memory tiles</li><li>Multiple matching lines</li></ul><span class="primary play-link">Play Hexagon<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-5-5 5 5-5 5"/></svg></span></div>
+        <div class="game-cover hex-cover" aria-hidden="true"><svg viewBox="0 0 280 220"><g fill="var(--surface)" stroke="var(--r-control-line)" stroke-width="1.4"><path d="M110 12 137 28V60L110 76 83 60V28Z"/><path d="M170 12 197 28V60L170 76 143 60V28Z"/><path d="M80 68 107 84V116L80 132 53 116V84Z"/><path d="M140 68 167 84V116L140 132 113 116V84Z"/><path d="M200 68 227 84V116L200 132 173 116V84Z"/><path d="M110 124 137 140V172L110 188 83 172V140Z"/><path d="M170 124 197 140V172L170 188 143 172V140Z"/></g><g fill="var(--accent)" font-family="Geist,system-ui,sans-serif" font-size="26" text-anchor="middle"><text x="110" y="53">2</text><text x="170" y="53">B</text><text x="80" y="109">C</text><text x="140" y="109">5</text><text x="200" y="109">E</text><text x="110" y="165">F</text><text x="170" y="165">5</text></g></svg><p>Remember the numbers <span>→</span> find the line</p></div>
+        <div class="game-details"><h3 id="hexagon-title">Hexagon</h3><p>Memorize the numbers, then find three tiles in a straight line that add up to the target.</p><span class="primary play-link r-button r-button--primary">Play Hexagon<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14m-5-5 5 5-5 5"/></svg></span></div>
       </a>
-      <p class="library-note">Pick a puzzle. Take your time. There’s always one more piece.</p>
+
     </section>
-    <footer class="library-footer"><p>Unofficial. Inspired by <cite>The Devil’s Plan</cite>.</p><label class="beans-option"><input id="beans-motion" type="checkbox" checked>Beans animation</label></footer>
-    <div class="library-preferences"><label for="motion-mode">Game transition</label><select id="motion-mode"><option value="full">Black hole + TV</option><option value="reduced">Simple fade</option></select><div id="library-audio-control"></div></div>
+    <footer class="library-footer"><p>Unofficial. Inspired by <cite>The Devil’s Plan</cite>.</p><label class="beans-option r-checkbox"><input id="beans-motion" type="checkbox" checked>Beans animation</label></footer>
+    <div class="library-preferences"><div class="r-field appearance-field"><label for="appearance">Appearance</label><div class="r-select-wrap"><select id="appearance" class="r-input r-select" data-appearance><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select><svg class="r-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m5 8 5 5 5-5"/></svg></div></div><div class="r-field transition-field"><label for="motion-mode">Game transition</label><div class="r-select-wrap"><select id="motion-mode" class="r-input r-select"><option value="full">Black hole + TV</option><option value="reduced">Simple fade</option></select><svg class="r-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="m5 8 5 5 5-5"/></svg></div></div><div id="library-audio-control"></div></div>
     <dialog id="about-dialog" class="library-about" aria-labelledby="about-title">
       <div class="beans-dialog-dock"></div><h2 id="about-title" tabindex="-1">About One More Piece</h2>
       <p>A place to play puzzles and games inspired by <cite>The Devil’s Plan</cite>. Play Secret Code, Loop Fence Puzzle and Hexagon at your own pace.</p>
       <p>These are unofficial solo adaptations with original generated puzzles. Each game explains its own rules and practice options.</p>
-      <button id="about-close" class="primary">Back to the library</button>
+      <button id="about-close" class="primary r-button r-button--primary">Back to the library</button>
     </dialog>
   </main>
 <p id="launch-status" class="launch-status" role="status" aria-live="polite"></p><div id="portal" class="portal" aria-hidden="true"><div class="portal-aura"></div><div class="portal-ring"></div><div class="portal-core"></div></div><div id="screen-dark" class="screen-dark" aria-hidden="true"><div class="tv-line"></div></div>

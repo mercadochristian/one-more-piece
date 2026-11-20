@@ -37,7 +37,7 @@
   function syncClock(){
     if(!puzzle)return;
     const timed=phase==='study'||phase==='recall'&&config().answerSeconds>0;
-    if(!timed){deadline=null;$('clock').textContent=phase==='recall'?'Untimed':'';return;}
+    if(!timed){deadline=null;$('clock').textContent='';return;}
     if(blocked()){
       if(deadline!==null){remaining=Math.max(0,deadline-Date.now());deadline=null;tiles();$('phase-label').textContent=phase==='study'?'Study paused':'Recall paused';}
       $('clock').textContent='Paused';return;
@@ -48,14 +48,14 @@
   }
   function recall(){
     phase='recall';deadline=null;remaining=config().answerSeconds*1000;
-    $('phase-copy').textContent='Choose three adjacent tiles in one straight line. Their remembered numbers must add up to the target.';
-    update();syncClock();tell('Find every matching line. Numbers stay hidden until this round ends.');sound('memory');Beans.react('review');focusTile('A');
+    $('phase-copy').textContent='Choose three adjacent tiles in a straight line matching the target.';
+    update();syncClock();tell('');sound('memory');Beans.react('review');focusTile('A');
   }
   function study(){
     if(!puzzle)return;
     if(phase==='ready'){
       phase='study';remaining=config().memorySeconds*1000;deadline=null;
-      $('phase-copy').textContent='Memorize the numbers and their positions. The target is still hidden.';update();syncClock();sound('memory');Beans.react('review');
+      $('phase-copy').textContent='Memorize the positions. The target appears next.';update();syncClock();sound('memory');Beans.react('review');
       $('start-study').focus({preventScroll:true});
     }else if(phase==='study'){recall();}
   }
@@ -65,7 +65,7 @@
     if(selected.includes(letter)){selected=selected.filter(l=>l!==letter);sound('deselect');}
     else if(selected.length<3){selected.push(letter);sound('select');Beans.react('select');}
     else{tell('Three tiles are selected. Deselect one before choosing another.');return;}
-    update();tell(`${selected.length} of 3 letters selected. Submit a straight line matching the target.`);
+    update();tell(`${selected.length}/3 selected.`);
   }
   function renderBoard(){
     const board=$('hex-board');board.replaceChildren();
@@ -82,11 +82,11 @@
     try{const seed=new Uint32Array(1);crypto.getRandomValues(seed);puzzle=Hexagon.generate(next,seed[0]);}
     catch(_){if(!puzzle){$('start-study').disabled=true;$('give-up').disabled=true;}$('new-game').focus({preventScroll:true});tell('Could not create a playable round. Choose New round to retry.','error');return;}
     level=next;round++;phase='ready';deadline=null;remaining=0;selected=[];found=[];score=0;lastTile='A';
-    $('puzzle-label').textContent=`Round ${String(round).padStart(2,'0')} · ${config().label}`;
+    $('puzzle-label').textContent=`Round ${String(round).padStart(2,'0')}`;
     document.querySelectorAll('input[name=difficulty]').forEach(el=>el.checked=el.value===level);
     $('range-label').textContent=`Numbers 1–${config().max}`;$('memory-label').textContent=`${config().memorySeconds}s to memorize`;$('limit-label').textContent=config().answerSeconds?`${config().answerSeconds}s recall`:'Untimed recall';
-    $('round-review').hidden=true;$('review-lines').replaceChildren();$('phase-copy').textContent='Start when you’re ready. The target appears after the numbers are hidden.';
-    renderBoard();update();syncClock();tell('Press Start memorizing when you’re ready.');Beans.react('new');
+    $('round-review').hidden=true;$('review-lines').replaceChildren();$('phase-copy').textContent='Memorize the positions, then match the target.';
+    renderBoard();update();syncClock();tell('');Beans.react('new');
     if(round>1)$('start-study').focus({preventScroll:true});
   }
   function finish(won,message){

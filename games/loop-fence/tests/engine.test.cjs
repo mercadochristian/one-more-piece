@@ -52,7 +52,7 @@ test('bounded search reports exhaustion instead of claiming uniqueness',()=>{
 
 test('phone corner input resolves to the nearest line at every difficulty and viewport size',()=>{
   for(const {size}of Object.values(E.levels))for(const width of [258,312,434]){
-    // Old overlapping rectangles send this point to the later-painted vertical button.
+    // Near a corner, choose the edge with the shorter perpendicular distance.
     assert.equal(E.hitEdge(size,9,8,width),0);
     assert.equal(E.hitEdge(size,8,9,width),size*(size+1));
     assert.equal(E.hitEdge(size,0,0,width),null,'dots do not choose an arbitrary edge');

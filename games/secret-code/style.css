@@ -1,3 +1,490 @@
+.section-heading > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 9px;
+}
+.card[data-color="Blue"] {
+  --card-color: var(--blue);
+}
+.card[data-color="Gold"] {
+  --card-color: var(--gold);
+}
+.card[data-color="Jade"] {
+  --card-color: var(--jade);
+}
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+}
+.card-letter {
+  font-size: 14px;
+  color: var(--muted);
+}
+.card svg {
+  width: 14px;
+  height: 14px;
+  color: var(--card-color);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+.card[aria-pressed="true"]::after {
+  content: "✓";
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: var(--accent);
+  font-size: 13px;
+}
+.card.answer-card {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.card:disabled {
+  opacity: 0.7;
+}
+.card.answer-card:disabled {
+  opacity: 1;
+}
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 17px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.legend > span:first-child {
+  color: var(--ink);
+}
+.clue-sheet {
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
+}
+.clue-intro {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: -6px;
+  margin-bottom: 16px;
+}
+.clues {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: clues;
+}
+.clues li {
+  border-top: 1px solid var(--line);
+  counter-increment: clues;
+}
+.clues label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 17px 0;
+  line-height: 1.5;
+  font-size: 14px;
+  cursor: pointer;
+}
+.clues input {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.clues label:has(input:checked) span {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--muted);
+}
+.order-note {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.answer-entry {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.slot.empty {
+  color: var(--muted);
+  border-style: dashed;
+}
+#countdown {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-size: 22px;
+}
+.solution {
+  padding: 25px 0;
+}
+.solution h2 {
+  font: 30px var(--r-font);
+  margin-bottom: 15px;
+}
+.solution ol {
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.solution li {
+  padding: 6px 0;
+}
+.solution li strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.answer-slots {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+.answer-panel:focus-within {
+  outline: 1px solid var(--accent);
+}
+.card:not(:disabled):active {
+  transform: scale(0.97);
+}
+.slot:not(.empty) {
+  animation: code-seat 200ms var(--motion-out);
+}
+.win-code {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 26px 0;
+}
+.win-code span {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 66px;
+  background: var(--r-feature);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font: 34px var(--r-font);
+  color: var(--accent);
+}
+.win-dialog[open] .win-code span {
+  animation: code-seat 250ms var(--motion-out) both;
+}
+.win-code span:nth-child(2) {
+  animation-delay: 40ms;
+}
+.win-code span:nth-child(3) {
+  animation-delay: 80ms;
+}
+.win-code span:nth-child(4) {
+  animation-delay: 120ms;
+}
+.play-area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 335px;
+  gap: 44px;
+  padding: 30px 0;
+  padding-top: 16px;
+}
 /* Keep the card's output letter prominent alongside its clue number. */
-.card .card-letter{font-size:17px;font-weight:600;color:var(--accent)}.board-note{max-width:65ch}.answer-entry h2{white-space:normal}
-@media(max-width:520px){.card .card-letter{font-size:15px}}
+.card .card-letter {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: var(--r-space-4);
+}
+.section-heading h2 {
+  font: 600 20px/1.15 var(--r-font);
+  letter-spacing: -0.025em;
+}
+.card {
+  --card-color: var(--coral);
+  position: relative;
+  min-width: 0;
+  min-height: 109px;
+  border: 1px solid var(--r-control-line);
+  border-top: 3px solid var(--card-color);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  transition:
+    transform var(--motion-press) var(--motion-out),
+    background-color var(--motion-press) ease,
+    border-color var(--motion-press) ease;
+  border-radius: var(--r-radius-control);
+  padding: var(--r-space-3);
+}
+.card-number {
+  display: block;
+  margin: 8px 0 5px;
+  font-family: var(--r-font);
+  font-size: 31px;
+  line-height: 1;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+.card-color {
+  display: block;
+  color: var(--card-color);
+  letter-spacing: 0.025em;
+  font-size: 12px;
+}
+.card[aria-pressed="true"] {
+  background: var(--r-feature);
+  transform: none;
+  border-color: var(--r-focus);
+  box-shadow: inset 0 0 0 1px var(--r-focus);
+}
+.card[aria-pressed="true"] .card-letter {
+  font-weight: bold;
+  color: var(--r-on-feature);
+}
+/* Keep the code visible while scrolling; JavaScript measures clearance below the page. */
+.answer-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  z-index: 5;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 16px;
+  border: 1px solid var(--r-line);
+  border-radius: var(--r-radius-panel);
+  background: var(--r-surface);
+  box-shadow: var(--r-shadow);
+  padding: var(--r-space-4) var(--r-space-6);
+  width: min(calc(100% - 2 * var(--r-page-gutter)), 1344px);
+}
+.answer-entry h2 {
+  white-space: normal;
+  font: 600 20px/1.15 var(--r-font);
+  letter-spacing: -0.025em;
+}
+.answer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--r-space-2);
+}
+.slot {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 49px;
+  border: 1px solid var(--r-control-line);
+  font-size: 22px;
+  font-family: var(--r-font);
+  color: var(--accent);
+  border-color: var(--r-control-line);
+  border-radius: var(--r-radius-small);
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+.answer-entry p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+  white-space: nowrap;
+}
+:root[data-input="keyboard"] .card {
+  transition: none;
+}
+:root[data-input="keyboard"] .card[aria-pressed="true"] {
+  transform: none;
+}
+body[data-game="secret-code"] {
+  padding-bottom: var(--answer-clearance, 112px);
+}
+@media (min-width: 1450px) {
+  .card {
+    min-height: 120px;
+  }
+  .card-number {
+    font-size: 36px;
+  }
+  .play-area {
+    gap: 50px;
+  }
+}
+@media (max-width: 1100px) {
+  .play-area {
+    gap: 25px;
+    grid-template-columns: minmax(0, 1fr) 290px;
+  }
+  .clue-sheet {
+    padding-left: 22px;
+  }
+  .board {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .card {
+    min-height: 100px;
+  }
+  .answer-entry {
+    gap: 15px;
+  }
+}
+@media (max-width: 780px) {
+  .clues {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 22px;
+  }
+  .clues label {
+    padding: 13px 0;
+    font-size: 13px;
+  }
+  .order-note {
+    margin-top: 0;
+  }
+  .card-number {
+    font-size: 27px;
+  }
+  .answer-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .answer-actions .primary {
+    flex: 1;
+  }
+  .legend {
+    gap: 12px;
+  }
+  .answer-entry > div:first-child {
+    width: auto;
+  }
+  .slot {
+    width: 36px;
+    height: 42px;
+  }
+  .answer-slots {
+    gap: 5px;
+  }
+  .play-area {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 25px 0;
+  }
+  .win-code span {
+    width: 50px;
+    height: 60px;
+  }
+  .answer-entry p {
+    max-width: 15ch;
+    font-size: 12px;
+  }
+  .clue-sheet {
+    border: 0;
+    padding: 0;
+    order: initial;
+  }
+  .card {
+    min-height: 95px;
+    padding: var(--r-space-2);
+  }
+  .board {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: var(--r-space-2);
+  }
+  .card-color {
+    font-size: 11px;
+  }
+  .answer-panel {
+    flex-wrap: wrap;
+    bottom: 10px;
+    padding: var(--r-space-4);
+    gap: var(--r-space-3);
+  }
+  .answer-entry h2 {
+    font-size: 16px;
+  }
+  .answer-entry {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: var(--r-space-2);
+  }
+  /* Keep Clear compact so the title and four code slots fit in the fixed row. */
+  .answer-entry > .r-button--ghost {
+    padding-inline: 8px;
+    font-size: 12px;
+  }
+  .answer-actions .r-button {
+    width: 100%;
+  }
+}
+@media (max-width: 520px) {
+  .board {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .clues {
+    display: block;
+  }
+  .clues label {
+    padding: 12px 0;
+  }
+  .clue-intro {
+    margin-bottom: 12px;
+  }
+  .card {
+    min-height: 98px;
+  }
+  .card-number {
+    font-size: 30px;
+  }
+  .legend {
+    font-size: 11px;
+    gap: 10px;
+  }
+  .legend > span:first-child {
+    width: 100%;
+  }
+  .card .card-letter {
+    font-size: 15px;
+  }
+}
+@media (max-width: 350px) {
+  .board {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .slot {
+    width: 30px;
+    height: 38px;
+  }
+  .win-code {
+    gap: 7px;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:not(:disabled):hover {
+    background: var(--r-subtle);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition:
+      background-color var(--motion-press) ease,
+      border-color var(--motion-press) ease;
+  }
+  .card:not(:disabled):active {
+    transform: none;
+  }
+  .slot:not(.empty),
+  .win-dialog[open] .win-code span {
+    animation: win-fade 150ms ease both;
+  }
+}

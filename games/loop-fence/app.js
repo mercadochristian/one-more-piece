@@ -42,7 +42,14 @@
     document.querySelectorAll('[data-tool]').forEach(el=>el.disabled=busy||ended);
     document.querySelectorAll('.loop-cell-feedback').forEach(el=>el.dataset.incorrect=String(Boolean(review?.report.cells.includes(Number(el.dataset.cell)))));
     $('reveal-tools').hidden=!review;$('reveal-details').hidden=!review;
-    if(review){$('show-attempt').setAttribute('aria-pressed',String(reviewView==='attempt'));$('show-solution').setAttribute('aria-pressed',String(reviewView==='solution'));}
+    if(review){
+      for(const [id,view] of [['show-attempt','attempt'],['show-solution','solution']]){
+        const button=$(id),selected=reviewView===view;
+        button.setAttribute('aria-pressed',String(selected));
+        button.classList.toggle('r-button--primary',selected);
+        button.classList.toggle('r-button--secondary',!selected);
+      }
+    }
 
   }
   function edgeLabel(i){const e=LoopFence.topology(puzzle.size).edges[i];return `${e.orientation==='h'?'Horizontal':'Vertical'} edge, row ${e.r+1}, column ${e.c+1}`;}
@@ -82,10 +89,10 @@
       const seed=new Uint32Array(1);crypto.getRandomValues(seed);
       puzzle=await LoopFence.generate(nextLevel,seed[0],()=>new Promise(resolve=>setTimeout(resolve,0)));
       level=nextLevel;values=Array(LoopFence.topology(puzzle.size).edges.length).fill(0);history=[];future=[];puzzleNumber++;strict=$('strict').checked;startedAt=Date.now();
-      render();$('puzzle-label').textContent=`Puzzle ${String(puzzleNumber).padStart(2,'0')} · ${LoopFence.levels[level].label}`;$('board-size').textContent=`${puzzle.size} × ${puzzle.size} grid`;
+      render();$('puzzle-label').textContent=`Puzzle ${String(puzzleNumber).padStart(2,'0')}`;$('board-size').textContent=`${puzzle.size} × ${puzzle.size} grid`;
       document.querySelectorAll('input[name=difficulty]').forEach(el=>el.checked=el.value===level);
-      tell(strict?'One attempt. Make every edge count.':'Draw one closed loop. Crosses are optional notes.');Beans.react('new');
-    }catch(error){puzzle=null;values=[];history=[];future=[];$('loop-board').replaceChildren();tell('Could not verify a fresh puzzle. Choose New puzzle to retry.','error');}
+      tell(strict?'One attempt only.':'');Beans.react('new');
+    }catch(_){puzzle=null;values=[];history=[];future=[];$('loop-board').replaceChildren();tell('Could not verify a fresh puzzle. Choose New puzzle to retry.','error');}
     finally{busy=false;$('loop-board').setAttribute('aria-busy','false');update();if(puzzle&&puzzleNumber>1)focusEdge(document.querySelector('.loop-edge'));else if(!puzzle)$('new-game').focus();}
   }
   function confirm(title,copy,label,action,trigger){pending=action;returnFocus=trigger||document.activeElement;$('confirm-title').textContent=title;$('confirm-copy').textContent=copy;$('confirm-ok').textContent=label;$('confirm-dialog').showModal();$('confirm-cancel').focus();Beans.react('review');}
@@ -110,6 +117,7 @@
     tell(`${view==='attempt'?'Your attempt':'Correct loop'} shown. ${reviewMessage()}`);Beans.react('review');
   }
   function reveal(){
+    // Keep an independent attempt snapshot so switching views cannot overwrite the drawing.
     const attempt=values.slice(),report=LoopFence.compare(puzzle,attempt);
     review={attempt,solution:report.correct?attempt.map(v=>v===1?1:0):puzzle.answer.slice(),report};
     ended=true;failed=false;$('loop-board').dataset.revealed='true';
